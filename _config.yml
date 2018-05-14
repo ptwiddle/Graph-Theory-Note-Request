@@ -1,1 +1,8 @@
-theme: jekyll-theme-minimal
+title: "Graph Theory Note Compilation"
+email: "paul.johnson@sheffield.ac.uk"
+baseurl: "/Graph-Theory-Note-Request/"
+collections:
+   lecturenotes:
+      output: true
+github_username: ptwiddle
+markdown: kramdown
