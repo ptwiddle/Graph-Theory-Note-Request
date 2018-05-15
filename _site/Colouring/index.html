@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Colouring Graphs</title>
+  <meta name="description" content="">
+
+  <link rel="stylesheet" href="/Graph-Theory-Note-Request//css/main.css">
+  <link rel="canonical" href="http://localhost:4000/Graph-Theory-Note-Request//Colouring/">
+  <link rel="alternate" type="application/rss+xml" title="Graph Theory Note Compilation" href="http://localhost:4000/Graph-Theory-Note-Request//feed.xml" />
+</head>
+
+
+ <!-- Mathjax.  But maybe I want this not in header and only in pages that might use math? -->
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/Graph-Theory-Note-Request//">Graph Theory Note Compilation</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Introduction/">Introduction</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Walks/">Walks</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Algorithms/">Algorithms</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Colouring/">Colouring Graphs</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Surfaces/">Graphs on Surfaces</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Colouring Graphs</h1>
+  </header>
+
+  <article class="post-content">
+    <p>The last topic we will cover is coulouring graphs.  There will be three elements to this – chromatic number, chromatic index, and chromatic polynomials.</p>
+
+<h2 id="chromatic-number">Chromatic number</h2>
+
+<p>When colouring maps, often the different regions (countries, counties, states) are given different colours, with the idea that adjance regions should have different colours so the boundaries can be easily seen.  For instance, in this map of Britain and Ireland each county is coloured one five colours (red, yellow, green, brown and purple), with counties that border on each other having different colours.</p>
+
+<p><img src="../TeXpictures/BritishCounties.png" alt="Map of British Counties" /></p>
+
+<h1 id="definition-chromatic-number">Definition: Chromatic number</h1>
+
+<p>The <em>chromatic number</em>, denoted <script type="math/tex">\chi(\Gamma)</script>, of a graph <script type="math/tex">\Gamma</script> is the least number of colours needed to colour the vertices of <script type="math/tex">\Gamma</script> so that adjacent vertices are given different colours.</p>
+
+<p>The study of chromatic numbers began with trying to colour maps as described above: it was conjectured in the 1800’s that any map drawn on the sphere could be coloured with only four colours.  This does not have much practical application: note, for instance, that the map of Britain above uses five colours.   This conjecture was not proven for more than a hundred years, and is now known as the <a href="https://en.wikipedia.org/wiki/Four_color_theorem">four colour theorem</a>.</p>
+
+<h1 id="theorem-appel-and-haken-1976">Theorem (Appel and Haken, 1976)</h1>
+<p>Any planar graph <script type="math/tex">G</script> can be coloured with four colours; i.e., <script type="math/tex">\chi(G)\leq 4</script>.</p>
+
+<p>The proof of the four colours theorem is enormous, taking hundreds of pages as well as computer calculations.  It was the first major theorem to rely heavily on computer calculations, and was very controversial at the time because it raised philosophical questions about what mathematics is for.  We often say we just want to prove things, but if proof involves checking thousands of cases using a computer than what use is it, really?  What we really want is <em>human understanding</em>, and a proof is one way of doing that.</p>
+
+<p>The original proof of the four colour theorem has been simplified some, but it still huge.  It has also been <em>formalized</em>, i.e., written in a special computer language that checks that each step follows logical from the previous one and no steps are skipped.</p>
+
+<h1 id="example-complete-graph">Example: Complete graph</h1>
+
+<p>The complete graph <script type="math/tex">K_n</script> has chromatic number <script type="math/tex">\chi(K_n)=n</script>.  Since evevery vertex is adjacent to every other vertex, no two vertices can have the same colour. <script type="math/tex">\square</script></p>
+
+<h1 id="notation-warning">Notation warning</h1>
+<p>Not that we used <script type="math/tex">\chi</script> earlier to denote the Euler characteristic, but there we talked about the Euler characteristic of a surface, <script type="math/tex">\chi(S)</script>, where we talk about chromatic number of a graph, and so it should be clear what <script type="math/tex">\chi</script> means from whether its input is a surface or a graph, but this should be unnecessary as words and context in the problem should make which meaning of <script type="math/tex">\chi</script> is being used.</p>
+
+<h1 id="example-cube-and-octahedron">Example: Cube and octahedron</h1>
+
+<p>Another potential source of confusion is when graphs are drawn on surfaces.  In the map discussion above, we were trying to colour the faces of the graph, where in the definition of chromatic number we are colouring the vertices of the graph.  If there is a graph on a surface, the colouring we are trying to do should be made clear from context, but we’d like to highlight that these two viewpoints are related by the notion of the dual graph of a graph on a surface – colouring the faces of a graph <script type="math/tex">\Gamma</script> on a surface <script type="math/tex">S</script> is equivalent to colouring the vertices of its dual graph.</p>
+
+<p>For example, let <script type="math/tex">C</script> denote the cube graph.  What’s <script type="math/tex">\chi(C)</script>?  The cube has an edge, and so it takes at least two colours to colour.  On the other hand, it is easy to see that two colours suffice, as in the following drawing:</p>
+
+<p><img src="../TeXpictures/CubeColouring.gif" alt="A colouring of the cube" /></p>
+
+<p>If we want to colour the <em>faces</em> of the cube, however, we quickly see that we are going to need at least three colours: pick any vertex, and look at the three faces that touch that vertex; they will all be touching each other, and thus will need to be different colours.</p>
+
+<p>On the other hand, we can describe a colouring of the faces of the cube that takes only three colours – colour each face and the face directly opposite it the same colour.</p>
+
+<h1 id="example-bipartite-graphs">Example: Bipartite graphs</h1>
+<p>We have already discussed one example of chromatic number, in bipartite graphs.  A graph has chromatic number 1 if and only if it has no edges.  A graph with at least one edge that has chromatic number two is bipartite; in particular, we see that the cube had chromatic number 2 because it is bipartite, whereas the octahedron has triangles and hence had higher chromatic number.</p>
+
+<h1 id="example-the-cycle-c_n">Example: the cycle <script type="math/tex">C_n</script></h1>
+<p>When <script type="math/tex">n</script> is even, <script type="math/tex">C_n</script> is bipartite, and so can be coloured with two colours, just alternating colours as we pass through the cycle.</p>
+
+<p>if <script type="math/tex">n</script> is odd, <script type="math/tex">C_n</script> is not bipartite, and so we will need at least three colours to colour the vertices.  It is easy to see that three is enough – just alternate with two colours until we get to the very last vertex of the cycle, which we can make the third colour.</p>
+
+<h2 id="upper-bounds-on-chig">Upper bounds on <script type="math/tex">\chi(G)</script></h2>
+
+<h1 id="definition">Definition</h1>
+<p>We use <script type="math/tex">\Delta(G)</script> to denote the maximum degree of <script type="math/tex">G</script>, i.e., the highest degree of any vertex.</p>
+
+<h1 id="theorem">Theorem</h1>
+<p><script type="math/tex">\chi(G)\leq \Delta(G)+1</script></p>
+
+<h1 id="proof">Proof</h1>
+
+<p>The basic idea is to just colour the vertices one by one – when we go to colour a vertex, it touches at most <script type="math/tex">\Delta(G)</script> vertices that are already coloured, and we just give it a colour that isn’t one of those.  If we have <script type="math/tex">\Delta(G)+1</script> colours available this is always possible.</p>
+
+<p>To prove this more formally, we use induction on the number of vertices.  It is clear that any graph with 0 or 1 vertex can be coloured with 1 colour.</p>
+
+<p>Suppose now that we have fixed an interger <script type="math/tex">m</script>, and we know that every graph with <script type="math/tex">\Delta(G)\leq m</script> and with less than <script type="math/tex">k</script> vertices can be coloured with at most <script type="math/tex">m+1</script> colours.  We want to show that any graph <script type="math/tex">\Gamma</script> with <script type="math/tex">k</script> vertices can be coloured with at most <script type="math/tex">m+1</script> vertices.</p>
+
+<p>Pick any vertex <script type="math/tex">v</script> of <script type="math/tex">\Gamma</script> and remove it.  The resulting graph <script type="math/tex">\Gamma\setminus v</script> has <script type="math/tex">k-1</script> vertices and so by the inductive hypothesis can be coloured with at most <script type="math/tex">m+1</script> colours.  Now, we need to colour <script type="math/tex">v</script>.  But <script type="math/tex">v</script> is adjacent to at most <script type="math/tex">m</script> vertices of <script type="math/tex">\Gamma</script>, so at least one of <script type="math/tex">m+1</script> colours does not appear at a vertex adjacent to <script type="math/tex">v</script> – colouring <script type="math/tex">v</script> this colour does what we need.</p>
+
+<h1 id="the-5-colour-theorem">The 5 Colour Theorem</h1>
+
+<p>Although the 4 colour theorem is extremely difficult to prove, weaker bounds are easy.  The six colour theorem can be derived from Euler’s theorem and induction, and with a little more work the 5 colour theorem can be proved.</p>
+
+<h2 id="chromatic-index-edge-colouring">Chromatic index: Edge colouring</h2>
+
+<p>Similarly to trying to colour the vertices of <script type="math/tex">G</script>, we could try to colour the edges, with the desire that edges that share a vertex have different colours.</p>
+
+<h1 id="definition-1">Definition</h1>
+
+<p>The <em>chromatic index</em> of <script type="math/tex">G</script>, denoted <script type="math/tex">\chi^\prime(G)</script>, is the least number of colours necessary to colour the edges of <script type="math/tex">G</script> so that any two edges that share a vertex have different colours.</p>
+
+<p>To determine the chromatic index of a graph one first obtains an upper bound by actually colouring the edges.  Then one shows a lower bound by proving that less colours can’t be used.  This can be done by analyzing what happens if we try to use less colours, or sometimes by a count of the number of edges and how many can be in a given group.</p>
+
+<h1 id="example-k_4">Example: <script type="math/tex">K_4</script></h1>
+
+<p>Let’s find <script type="math/tex">\chi^\prime(K_4)</script>.  Picking any vertex <script type="math/tex">v</script>, there are three edges incident to <script type="math/tex">v</script>, and none of these edges can have the same colour (as they all meet at <script type="math/tex">v</script>).  Hence, we have <script type="math/tex">\chi^\prime(K_4)\geq 3</script>.</p>
+
+<p>On the other hand, it is easy to colour the edges of <script type="math/tex">K_4</script> with three colours, as seen below, and so <script type="math/tex">\chi^\prime(K_4)\leq 3</script>, and hence <script type="math/tex">\chi^\prime(K_4)=3</script>.</p>
+
+<h1 id="example-k_5">Example: <script type="math/tex">K_5</script>.</h1>
+
+<p>Now, let’s move on to <script type="math/tex">K_5</script>.  Again, looking at any vertex we see all the edges adjacent to that vertex must be different colours, and so we have <script type="math/tex">\chi^\prime(K_5)\geq 4</script>.   Let’s try to colour the edges of <script type="math/tex">K_5</script> with 4 colours.</p>
+
+<p>Suppose we coloured the four edges adjacent to the top vertex blue, green, red and purple, from left to right, and now look at the bottom edge.  It is adjacent to edges coloured green and red, and so must be blue or purple.  By symmetry, it’s equivalent to colour it either colour, so let’s suppose it’s blue, giving us the following picture:</p>
+
+<p><img src="../TeXpictures/K5EdgeColouring1.png" alt="First step of showing you can't colour K_5 with 4 colours" /></p>
+
+<p>Now the edge on the right is adjacent to edges coloured red, blue and purple, and so must be green.  But now we have a problem – consider the edges labeled <script type="math/tex">x</script> and <script type="math/tex">y</script> in the next drawing:</p>
+
+<p><img src="../TeXpictures/K5EdgeColouring2.png" alt="Second" /></p>
+
+<p>Both edges share vertices with edges coloured green, blue, and purple, and hence each would need to be coloured red.  But they also share a vertex with each other, and so cannot both be coloured red.  So we see <script type="math/tex">\chi^\prime(K_5)\geq 5</script>.</p>
+
+<p>On the other hand, it is easy to colour the edges of <script type="math/tex">K_5</script> with 5 colours:  colour each edge in the outside pentagon a different colour.  For each edge in the outside pentagon there will be a unique edge in the inside star that does meet that edge (the one “parallel” to it) – draw that edge the same colour.  That results in the following colouring:</p>
+
+<p><img src="../TeXpictures/K5EdgeColouring3.png" alt="5 colouring" /></p>
+
+<p>We saw the last lecture that the chromatic number of a graph had an upper bound of <script type="math/tex">\Delta(G)+1</script>; it turns out that this holds for the chromatic index as well, although the proof is more difficult and we will skip it:</p>
+
+<h1 id="vizings-theorem">Vizing’s Theorem</h1>
+
+<p>Let <script type="math/tex">G</script> be a simple graph with largest vertex degree <script type="math/tex">\Delta(G)</script>.  Then</p>
+
+<script type="math/tex; mode=display">\Delta(G)\leq \chi^\prime(G)\leq \Delta(G)+1</script>
+
+<h1 id="proof-1">Proof</h1>
+
+<p>The lower bound is trivial – let <script type="math/tex">v</script> be the vertex with degree <script type="math/tex">\Delta</script>.  The <script type="math/tex">\Delta</script> edges adjacent to <script type="math/tex">v</script> all need different colours.  Upper bound is harder.</p>
+
+<h1 id="application-chromatic-number-and-chromatic-index">Application: Chromatic number and chromatic index</h1>
+
+<p>We now give application of chromatic number and chromatic index of the same graph.</p>
+
+<p>Suppose there are six friends, Alice, Bob, Charlie, Dora, Elizabeth and Frank, and there is the following graph between then:</p>
+
+<table>
+<tr> <td>A</td> <td></td><td></td><td></td><td></td><td></td></tr>
+<tr> <td>x</td><td>B</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>x</td><td></td><td>C</td><td></td><td></td><td></td></tr>
+<tr><td></td><td>x</td><td>x</td><td>D</td><td></td><td></td></tr>
+<tr><td>x</td><td></td><td>x</td><td></td><td>E</td><td></td></tr>
+<tr><td></td><td>x</td><td></td><td>x</td><td>x</td><td>F</td></tr>
+</table>
+
+<p>which translates into the following graph:</p>
+
+<p><img src="../TeXpictures/ChromaticNumberVsIndex.png" alt="graph of the table" /></p>
+
+<p>Here are two word problems, one of which relates to the chromatic number, and another relates to the chromatic index of <script type="math/tex">G</script></p>
+
+<ol>
+  <li>The friends want to divide into groups, but the xs indicate people who currently annoy each other.  What’s the least number of groups the friends can divide into groups so that no group contains two people who annoy each other.</li>
+  <li>The friends want to hold a snooker tournament, with everyone playing three matches; the xs indicate pairs of friends who will play against each other.  If multiple matches can be played each day, but each person can only be involved in one match a day, how many days are necessary to hold the tournament?</li>
+</ol>
+
+<p>The first case concerns the chromatic number – each group of people will be the people who have the same colour, and we don’t want vertices with an edge between them to have the same colour.</p>
+
+<p>The second case concerns the chromatic index – the edges are the games that are being played, and all edges that are the same colour will be played on the same day.</p>
+
+<p>To end today, let us quickly compute the chromatic number and chromatic index of the graph <script type="math/tex">G</script> above.  To compute the chromatic number, we observe that the graph contains a triangle, and so the chromatic number is at least 3.  But it is easy to colour the vertices with three colours – for instance, colour A and D red, colour C and F blue, and colur E and B green.  So <script type="math/tex">\chi(G)=3</script>.</p>
+
+<p>To compute <script type="math/tex">\chi^\prime(G)</script>, since A has degree three we have <script type="math/tex">\chi^\prime(G)\geq 3</script>.  On the other hand, it is easy to colour the edges with three colours – for instance, colour AB, CE and DF red, colour AE, CD and BF blue, and colour AC, BD and EF green.  So <script type="math/tex">\chi^\prime(G)=3</script> as well.</p>
+
+<h2 id="chromatic-polynomial">Chromatic polynomial</h2>
+
+<p>Instead of just asking whether the vertices of a graph can be coloured using <script type="math/tex">k</script> colours, one could try to <em>count</em> how many different ways the graph can be coloured using that many colours.</p>
+
+<h1 id="definition-2">Definition</h1>
+
+<p>Let <script type="math/tex">G</script> be a simple graph and let <script type="math/tex">k</script> be a positive integer.  The <em>chromatic polynomial</em>, written <script type="math/tex">P_G(k)</script> counts the number of ways to colour the vertices of <script type="math/tex">G</script> with <script type="math/tex">k</script> colours</p>
+
+<h1 id="example-the-complete-graph">Example: The complete graph</h1>
+
+<p>Suppose we want to colour the complete graph <script type="math/tex">K_n</script> with <script type="math/tex">k</script> colours.  We colour the vertices one by one.  For the first vertex, we can choose any of the <script type="math/tex">k</script> colours.  For the second vertex, we can choose any colour except the one used in the first vertex, and so we have <script type="math/tex">k-1</script> choices.  For the third vertex, we must pick a new colour, and hence have <script type="math/tex">k-2</script> choices.  Continuing in this manner, we see for the last vertex we will have <script type="math/tex">k-(n-1)</script> choices.  Thus, we see that</p>
+
+<script type="math/tex; mode=display">P_{K_n}(k)=k\cdot (k-1)\cdot (k-2)\cdots (k-(n-1))</script>
+
+<h1 id="relation-to-chromatic-number">Relation to Chromatic Number</h1>
+
+<p>Recall the chromatic number <script type="math/tex">\chi(G)</script> is the least number <script type="math/tex">k</script> so that <script type="math/tex">G</script> can be coloured with <script type="math/tex">k</script> colours.  If <script type="math/tex">G</script> can’t be coloured with <script type="math/tex">k</script> colours, then there are 0 colourings of <script type="math/tex">G</script> with <script type="math/tex">k</script> colourings, and so <script type="math/tex">P_G(k)=0</script>.  If <script type="math/tex">G</script> <em>can</em> be coloured with <script type="math/tex">k</script> colourings, then there is at least one such colouring, and so <script type="math/tex">P_G(k)>0</script>.  Thus, we see that the chromatic polynomial <script type="math/tex">P_G(k)</script> determines the chromatic number <script type="math/tex">\chi(G)</script>.</p>
+
+<h1 id="lemma">Lemma</h1>
+<p>The chromatic number <script type="math/tex">\chi(G)</script> is the least number <script type="math/tex">k</script> so that <script type="math/tex">P_G(k)\neq 0</script>.</p>
+
+<p>For certain graphs, one can calculate the chromatic polynomial just by starting at a vertex, and attempting to colour nearby vertices.  We illustrate this now for a couple of graphs, and also show how for more complicated graphs this method becomes more complicated.</p>
+
+<h1 id="example-the-path-graph-p_n">Example: The path graph <script type="math/tex">P_n</script></h1>
+
+<p>Recall the path graph <script type="math/tex">P_n</script> consisted of <script type="math/tex">n</script> vertices, with vertex <script type="math/tex">v_i</script> adjacent to vertices <script type="math/tex">v_{i\pm 1}</script>.</p>
+
+<p>Starting at the end vertex <script type="math/tex">v_1</script>, there are <script type="math/tex">k</script> possible colours we can colour it.  Moving onto vertex <script type="math/tex">v_2</script>, it can’t be the same colour as <script type="math/tex">v_1</script>, but otherwise could be any colour, and so there are <script type="math/tex">k-1</script> possible colours.</p>
+
+<p>Similarly, <script type="math/tex">v_3</script> can be any colour except that of <script type="math/tex">v_2</script>, and similarly for each vertex, and so we see <script type="math/tex">P_{P_n}=k(k-1)^{n-1}</script>.<script type="math/tex">\quad\square</script></p>
+
+<p>Note that the above argument holds for any tree, and so all trees have the same chromatic polynomial.</p>
+
+<h1 id="example">Example</h1>
+<p><img src="../TeXpictures/GraphGLecture20.png" alt="Not quite K_4" /></p>
+
+<p>Consider the graph <script type="math/tex">G</script> above.  Vertex <script type="math/tex">1</script> has <script type="math/tex">k</script> possibilities, then vertex 2 is adjacent to vertex 1, and so has <script type="math/tex">k-1</script> possibilities.  Vertex 3 is adjacent to 1 and 2, which are known to be different colours, and so has <script type="math/tex">k-2</script> possibilties.  Similarly, vertex 4 is adjacent to 2 and 3, which are adjacent and hence have different colours, and so vertex 4 has <script type="math/tex">k-2</script> possibilities as well, and so <script type="math/tex">P_G(k)=k(k-1)(k-2)^2</script></p>
+
+<h1 id="example-c_4">Example: <script type="math/tex">C_4</script></h1>
+
+<p><img src="../TeXpictures/c4.png" alt="The cycle graph C_4" /></p>
+
+<p>Now consider the graph <script type="math/tex">C_4</script>, as shown above.  Vertex <script type="math/tex">1</script> can be any of <script type="math/tex">k</script> colours, and vertex 2 has <script type="math/tex">k-1</script> possibilities – any colour except the one used for vertex <script type="math/tex">1</script>.  Moving to vertex 4, we see it is just adjacent to <script type="math/tex">1</script> as well, and so has <script type="math/tex">k-1</script> possibilities as well.</p>
+
+<p>It becomes more difficult when we try to colour vertex 3.  It is adjacent to vertices 2 and 4, and so cannot be the same colour as either of these.  However, vertices 2 and 4 are not adjacent, and so we don’t know whether they have the same colour or not.  If vertices 2 and 4, have the same colour there are <script type="math/tex">k-1</script> possibilities for vertex 3, while if vertices 2 and 4 have different colours, there are only <script type="math/tex">k-2</script> possibilties.  Thus, we must count how many possibilities are in each of these cases.</p>
+
+<p>If we want vertices 2 and 4 to have the same colour, we can first colour vertex 1 in <script type="math/tex">k</script> different ways, and then pick any of the remaining <script type="math/tex">k-1</script> colours for vertices <script type="math/tex">2</script> and <script type="math/tex">4</script>.  Then, to complete this to a colouring of <script type="math/tex">C_4</script>, with have to colour <script type="math/tex">v_3</script>, which can be any of the <script type="math/tex">k-1</script> colours that aren’t the colour <script type="math/tex">v_2</script> and <script type="math/tex">v_4</script> are coloured.  Thus, the case where <script type="math/tex">v_2</script> and <script type="math/tex">v_4</script> have the same colour has <script type="math/tex">k(k-1)^2</script> possibilities.</p>
+
+<p>If we want vertices 2 and 4 to have different colours, then we can first colour <script type="math/tex">v_1</script> any of <script type="math/tex">k</script> colours, colour <script type="math/tex">v_2</script> any of <script type="math/tex">k-1</script> colours.  Now, when we go to colour vertex 4 it can’t be the same colour as vertex 1 since they are adjacent, and it can’t be the same colour as vertex 2 by our supposition.  Vertices <script type="math/tex">v_1</script> and <script type="math/tex">v_2</script> have different colours, and so this leaves <script type="math/tex">k-2</script> possibilities for <script type="math/tex">v_4</script>.  Thus there are <script type="math/tex">k(k-1)(k-2)</script> possibilities to colour vertices 1, 2 and 4 so that 2 and 4 have different colours, and then there are <script type="math/tex">k-2</script> possibilities left for vertex 3, giving <script type="math/tex">k(k-1)(k-2)^2</script> ways to colour <script type="math/tex">C_4</script> so that vertices 2 and 4 have different colours.</p>
+
+<p>Adding the two cases together, this gives</p>
+
+<script type="math/tex; mode=display">P_{C_4}(k)=k(k-1)^2+k(k-1)(k-2)^2=k(k-1)[k-1+(k-2)^2]=k(k-1)(k^2-3k+3)\quad\square</script>
+
+<p>For larger graphs, sometimes the colouring method we used above will work well, while for others the type of case by case analysis we needed for <script type="math/tex">C_4</script> will explode and make it intractible.  To prove that <script type="math/tex">P_G(k)</script> is a polynomial, we will need a general method to deal with it.</p>
+
+<h2 id="deletion-contraction">Deletion Contraction</h2>
+
+<p>Consider an edge <script type="math/tex">e</script> in a graph <script type="math/tex">\Gamma</script>.  There are two new graphs we can make – we can delete the edge <script type="math/tex">e</script>, getting a graph <script type="math/tex">\Gamma\setminus e</script>, that has the same vertex set and one less edge.</p>
+
+<p>We can also <em>contract</em> <script type="math/tex">e</script> – that is, shrink it to a point.  Doing this may create multiple edges – for instance, if we contract an edge in the triangle <script type="math/tex">C_3</script>, we get two vertices connected by two edges, which we will call <script type="math/tex">C_2</script>.  These extra edges will not matter for the chromatic polynomial, so if we have multiple edges we will delete the extra copies.  This simplification is necessary, because if we contracted one of the edges of <script type="math/tex">C_2</script>, we would get a loop, which can’t be coloured at all!</p>
+
+<p>The resulting graph <script type="math/tex">\Gamma/e</script> has one less vertex (the two vertices adjacent to <script type="math/tex">e</script> have been identified to one) and at least one less edge (the one contracted), but possibly more (if we had to delete some multiple edges).</p>
+
+<p>We want to prove:</p>
+
+<h1 id="lemma-1">Lemma</h1>
+
+<script type="math/tex; mode=display">P_{\Gamma\setminus e}(k)=P_{\Gamma}(k)+P_{\Gamma/e}</script>
+
+<h1 id="proof-2">Proof</h1>
+
+<p>Suppose the edge <script type="math/tex">e</script> connects vertices <script type="math/tex">v</script> and <script type="math/tex">w</script>.</p>
+
+<p>Consider a colouring of the graph <script type="math/tex">\Gamma\setminus e</script>.  Then, either the vertices <script type="math/tex">v</script> and <script type="math/tex">w</script> have the same colour or they have different colours.  If they have different colours, then this colouring is a valid colouring of <script type="math/tex">\Gamma</script> itself.</p>
+
+<p>It may happen, however, that <script type="math/tex">v</script> and <script type="math/tex">w</script> have the same colour.  Such a colouring does not give a colouring of <script type="math/tex">\Gamma</script>.  However, it does give a colouring of <script type="math/tex">\Gamma / e</script>, and furthermore any colouring of <script type="math/tex">\Gamma / e</script> gives a colouring of <script type="math/tex">\Gamma\setminus e</script> where <script type="math/tex">v</script> and <script type="math/tex">w</script> are the same colour.  <script type="math/tex">\square</script></p>
+
+<p>If we rewrite the statement of the lemma as 
+<script type="math/tex">P_\Gamma(k)=P_{\Gamma\setminus e} (k)-P{\Gamma/e}(k)</script>
+then we get a recursive way to calculate chromatic functions, as the graphs <script type="math/tex">\Gamma\setminus e</script> and <script type="math/tex">\Gamma/e</script> each have less edges than <script type="math/tex">\Gamma</script>.</p>
+
+<p>We will use this recursive equation to prove that the chromatic polynomial is in fact a polynomial.  As is usual in proofs using a recursion, the proof will use induction.  It is fun for a last proof for the course because it is a double induction, on the number of vertices AND the numebr of edges.</p>
+
+<h1 id="lemma-2">Lemma</h1>
+<p>Let <script type="math/tex">\Gamma</script> be a graph with <script type="math/tex">n</script> vertices and <script type="math/tex">m</script> edges.  The function <script type="math/tex">P_\Gamma(k)</script> is a polynomial of degree <script type="math/tex">n</script>, with leading coefficent <script type="math/tex">x^n</script> and second order term <script type="math/tex">-mx^{m-1}</script>, that is:</p>
+
+<script type="math/tex; mode=display">P_\Gamma(x)=x^n-mx^{n-1}+\dots</script>
+
+<p>where the dots are lower oder terms.</p>
+
+<h1 id="proof-3">Proof</h1>
+
+<p>We use induction on <script type="math/tex">m</script> and <script type="math/tex">n</script>.  As a base case, the empty graph <script type="math/tex">E_n</script> has <script type="math/tex">P_{E_n}=k^n</script>, which holds.</p>
+
+<p>Now suppose that <script type="math/tex">\Gamma</script> is a graph with <script type="math/tex">n</script> vertices and <script type="math/tex">m</script> edges, and we have proven the lemma for all graphs with less than <script type="math/tex">n</script> vertices, and for all graphs with <script type="math/tex">n</script> vertices but <script type="math/tex">% <![CDATA[
+j<m %]]></script> edges.  Picking any edge <script type="math/tex">e</script> of <script type="math/tex">\Gamma</script> and applying deletion-contraction, we have:</p>
+
+<p><script type="math/tex">P_{\Gamma}(x)=P_{\Gamma\setminus e}(x)-P_{\Gamma/e}(x)</script>.</p>
+
+<p>By the inductive hypothesis, both the terms on the right hand side are polynomials, so <script type="math/tex">P_{\Gamma}(k)</script> is a polynomial.  We have <script type="math/tex">P_{\Gamma\setminus e}(k)=x^n-(m-1)x^{n-1}+\cdots</script> and <script type="math/tex">P_{\Gamma/e}(k)=x^{n-1}+\cdots</script>, so the statements about the degree, leading coefficient, and second coefficient all follow.</p>
+
+<h1 id="gluing-formula">Gluing Formula</h1>
+
+<p>If <script type="math/tex">\Gamma</script> is made from two graphs <script type="math/tex">\Gamma_1</script> and <script type="math/tex">\Gamma_2</script> that only share a vertex or edge in common, then there are “gluing” formulas that express the chromatic polynomial of <script type="math/tex">\Gamma</script> nicely in terms of those of <script type="math/tex">\Gamma_1</script> and <script type="math/tex">\Gamma_2</script>.</p>
+
+<h1 id="theorem-1">Theorem:</h1>
+<p>Let <script type="math/tex">\Gamma</script> be the union of two subgraphs <script type="math/tex">\Gamma_1</script> and <script type="math/tex">\Gamma_2</script>, with their intersection a single vertex: <script type="math/tex">\Gamma_1\cap\Gamma_2=v</script>.  Then
+<script type="math/tex">\chi_\Gamma(k)=\frac{1}{k}\chi_{\Gamma_1}(k)\chi_{\Gamma_2}(k)</script></p>
+
+<h1 id="proof-4">Proof:</h1>
+<p>There are <script type="math/tex">\chi_{\Gamma_1}(k)</script> ways to colour <script type="math/tex">\Gamma_1</script> with <script type="math/tex">k</script> colours.  To extend this to all of <script type="math/tex">\Gamma</script> we need to colour <script type="math/tex">\Gamma_2</script>, with the proviso that the colour of <script type="math/tex">v</script> was fixed for us.  But each of the <script type="math/tex">k</script> colours is essentially interchangable; there are as many colourings of <script type="math/tex">\Gamma_2</script> where <script type="math/tex">v</script> is red, as there are where <script type="math/tex">v</script> is blue, as there are when <script type="math/tex">v</script> is any colour, hence this is <script type="math/tex">1/k</script> of the total.</p>
+
+<p>AS we have <script type="math/tex">\chi_{\Gamma_1}(k)</script> ways to colour <script type="math/tex">\Gamma_1</script>, and then <script type="math/tex">\frac{1}{k}\chi_{\Gamma_2}(k)</script> ways to extend the colouring to all of <script type="math/tex">\Gamma</script>, we have the result. <script type="math/tex">\square</script></p>
+
+<h1 id="theorem-2">Theorem:</h1>
+<p>Let <script type="math/tex">\Gamma</script> be the union of two subgraphs <script type="math/tex">\Gamma_1</script> and <script type="math/tex">\Gamma_2</script>, with their intersection a single edge <script type="math/tex">e</script> between <script type="math/tex">v</script> and <script type="math/tex">w</script>: <script type="math/tex">\Gamma_1\cap\Gamma_2=e</script>.  Then
+<script type="math/tex">\chi_\Gamma(k)=\frac{1}{(k)(k-1)}\chi_{\Gamma_1}(k)\chi_{\Gamma_2}(k)</script></p>
+
+<h1 id="proof-5">Proof:</h1>
+<p>There are <script type="math/tex">\chi_{\Gamma_1}(k)</script> ways to colour <script type="math/tex">\Gamma_1</script> with <script type="math/tex">k</script> colours.  To extend this to all of <script type="math/tex">\Gamma</script> we need to colour <script type="math/tex">\Gamma_2</script>, with the proviso that the colours of <script type="math/tex">v</script> and <script type="math/tex">w</script> were fixed for us.  Since <script type="math/tex">v</script> and <script type="math/tex">w</script> were adjacent, they’re two different colours.  But each of the pairs of colours are interchangable; there are as many colourings of <script type="math/tex">\Gamma_2</script> where <script type="math/tex">v</script> and <script type="math/tex">w</script> are any pair of two different colours.  Since there are <script type="math/tex">k(k-1)</script> ways to colour <script type="math/tex">v</script> and <script type="math/tex">w</script>, the number of ways where <script type="math/tex">v</script> and <script type="math/tex">w</script> have any given colouring must be <script type="math/tex">1/[k(k-1)]</script> of the total.</p>
+
+<p>AS we have <script type="math/tex">\chi_{\Gamma_1}(k)</script> ways to colour <script type="math/tex">\Gamma_1</script>, and then <script type="math/tex">\frac{1}{k(k-1)}\chi_{\Gamma_2}(k)</script> ways to extend the colouring to all of <script type="math/tex">\Gamma</script>, we have the result. <script type="math/tex">\square</script></p>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li><a href="mailto:paul.johnson@sheffield.ac.uk">paul.johnson@sheffield.ac.uk</a></li>
+          <li><a href="http://ptwiddle.github.io">Paul Johnson</a></li>
+          <li> Hicks J6b</li> 
+          <li> Office Hours: Monday 2-3, Wednesday 11-12</li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/ptwiddle">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">ptwiddle</span>
+            </a>
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Recent updates:  </p> 
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

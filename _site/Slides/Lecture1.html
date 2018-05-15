@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	<meta charset="utf-8">
+
+		<title>Lecture 1: Introduction, Handshaking </title>
+
+		<meta name="description" content="Lecture slides from MAS341">
+		<meta name="author" content="Paul Johnson">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+        	<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+
+
+
+<section>
+<h1> Graph Theory Lecture 1 </h1>
+<h2> Introduction, Instant Insanity </h2>
+<small> Lecturer Paul Johnson  </small>
+</section>
+
+<section>
+<h1>
+Basic Information 
+</h1>
+</section>
+
+<section>
+<h2> Contact </h2>
+<ul>
+<li>ptwiddle.github.io/MAS439-Commutative-Algebra/</li>
+<li>Email: paul.johnson@sheffield.ac.uk </li>
+<li>Office hours: Tuesday 1:30-2:30, Friday 10-11 </li>
+<li>Office: Hicks J6b </li>
+</ul>
+</section>
+
+<section>
+<h2> Marking </h2>
+<ul>
+<li> The final exam is 100% of the grade </li>
+<li> Exam slightly different than past years: all questions mandatory</li>
+<li> A practice exam will be available </li>
+</ul>
+
+</section>
+
+<section>
+<h1> Take the National Student Survey </h1>
+</section>
+
+
+<section>
+<h1>Basic definitions</h1>
+</section>
+
+<section>
+<h3>Graphs can encode connections</h3>
+<p>A <b>graph</b> $\Gamma$ consists of:</p>
+<ul> 
+<li>A set $V(\Gamma)$ of vertices (usually things)</li>
+<li>A set $E(\Gamma)$ of edges (usually connections)</li>
+</ul>
+<p>Each edge $e\in E(\Gamma)$ connects two vertices in  $V(\Gamma)$.</p>
+</section>
+
+
+<section>
+<h3>Some features are not always wanted:</h3>
+<ul>
+<li> A <b> loop</b> is an edge connecting a vertex to itself </li>
+<li> There could be multiple edges between the same two vertices </li>
+<ul>
+<p> Graphs without loops or multiple edges are called <b>simple</b></p>
+
+</section>
+
+
+
+<section>
+<h1>Examples</h1>
+</section>
+
+
+
+
+<section>
+<image class="stretch" src="Pictures/LondonTubeMap.png"> </image>
+
+</section>
+
+<section>
+<image src="Pictures/Caffeine2d.png"></image>
+<image src="Pictures/Caffeine3d.png"></image>
+</section>
+
+<section>
+<image class="stretch" src="Pictures/Linkedin.gif"></image>
+</section>
+
+
+<section>
+<image class="stretch" src="Pictures/risk.jpg"></image>
+</section>
+
+<section>
+<image class="stretch" src="Pictures/riskpicture.jpeg"></image>
+</section>
+
+<section>
+<image class="stretch" src="Pictures/Petersen4.png"></image>
+</section>
+
+
+
+<section>
+<h2> First application </h2>
+<p> Suppose you are at a party with 6 other people.</p>
+<p>  Is it possible that every person knows exactly three other people at the party? </p>
+
+<p> (It is assumed if $A$ knows $B$, then $B$ knows $A$). </p>
+
+<p> </p>
+
+</section>
+
+<section>
+<h2> Make it a graph </h2>
+
+<ul>
+<li> Vertices are people (so there are 7) </li>
+<li> Edge between two people if they know each other </li>
+</ul>
+<p> Since each person knows three people, there are three edges coming out of each vertex </p>
+
+
+<h2> Try to draw such a graph </h2>
+</section>
+
+<section>
+<image class="stretch" src="attempted37.png"></image>
+</section>
+
+<section>
+<h2> Avoiding a case by case proof </h2>
+
+<p>Suppose everyone shook hands with the people at the party they knew.  How many handshakes would occur? </p>
+
+</section>
+
+<section>
+<h3> Two ways to count handshakes: </h3>
+<ul> <li> Each edge is a pair of people who know each other.  So there will be $|E(\Gamma)|$ handshakes. </li>
+<li> Since everyone knows three people, everyone will be involved in three handshakes.  But each handshake involves two people.  So, by this count, there would be $7\cdot 3/2=10.5 $  handshakes, i.e., edges, which is obviously nonsense </li>
+</ul>
+
+
+</section>
+
+<section>
+<p>For a simple graph $\Gamma$, and $v\in V(\Gamma)$, the <i>degree</i> of $v, d(v)$, is the number of vertices adjance to $v$.</p>
+<h3> Euler's handshaking Lemma </h3>
+
+$$\sum_{v\in V(\Gamma)}d(v)=2|E(\Gamma)|$$
+
+</section>
+
+<section>
+<h2>The degree sequence </h2>
+
+<p>The <i>degree sequence </i> of a graph is just the list of degrees of the vertices, with multiplicity. </p>
+
+</section>
+
+<section>
+<h1> Degree sequence in Chemistry </h1>
+</section>
+
+<section>
+
+<img src="Pictures/periodictablebig.jpg"></img>
+</section>
+
+<section>
+<ul> 
+<li>Hydrogen (H) and Fluorine (F) have degree 1</li>
+<li>Oxygen (O) and Sulfur (S) have degree 2 </li>
+<li> Nitrogen (N) and Phosphorous (P) have degree 3 </li>
+<li> Carbon (C) has degree 4 </li>
+</ul>
+<p> In biochemistry, carbon and hydrogen are most common.  Carbon are left blank, and Hydrogen aren't drawn at all </p>
+</section>
+
+
+<section>
+<p> Fluoxetine (Prozac) </p>
+<image src="Pictures/Fluoxetine.jpg"></image>
+</section>
+
+
+
+<section>
+<p>Hydrocarbons</p>
+<image src="Pictures/Hydrocarbons.jpg"></image>
+
+</section>
+
+
+
+<section>
+<h1> An application </h1>
+<image src="Pictures/InstantInsanityPackage.JPG"></image>
+</section>
+
+<section>
+<h2> Instant Insanity </h2>
+<ul>
+<li> 4 cubes </li>
+<li>Each side of each cube is colored one of four colors</li>
+<li>Goal is to stack the cubes so each direction has one face of each color</li>
+<li>Patterns online to make your own cubes and try to solve  </li>
+<li> Will see how graph theory helps this afternoon </li>
+</ul>
+
+
+
+</section>
+
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+ 
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+                              
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true },
+                                        { src: 'plugin/math/math.js', async: true }
+                                               ]
+				
+			});
+
+		</script>
+
+	</body>
+</html>

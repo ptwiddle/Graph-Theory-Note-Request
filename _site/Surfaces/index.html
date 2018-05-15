@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Graphs on Surfaces</title>
+  <meta name="description" content="">
+
+  <link rel="stylesheet" href="/Graph-Theory-Note-Request//css/main.css">
+  <link rel="canonical" href="http://localhost:4000/Graph-Theory-Note-Request//Surfaces/">
+  <link rel="alternate" type="application/rss+xml" title="Graph Theory Note Compilation" href="http://localhost:4000/Graph-Theory-Note-Request//feed.xml" />
+</head>
+
+
+ <!-- Mathjax.  But maybe I want this not in header and only in pages that might use math? -->
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/Graph-Theory-Note-Request//">Graph Theory Note Compilation</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Introduction/">Introduction</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Walks/">Walks</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Algorithms/">Algorithms</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Colouring/">Colouring Graphs</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Surfaces/">Graphs on Surfaces</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Graphs on Surfaces</h1>
+  </header>
+
+  <article class="post-content">
+    <p>This section is devoted to drawing graphs on surfaces; we will cover planar graphs and Kuratowski’s algorithm, drawing graphs on other surfaces, and Euler’s theorem and applications.  As an introduction, we begin with the <a href="https://en.wikipedia.org/wiki/Three_utilities_problem">Three utilities problem</a> (which apparently none of you had seen before).</p>
+
+<h1 id="an-old-chestnut">An Old Chestnut</h1>
+
+<p>Alice, Bob and Carol, each have a house, and each want to connect themselves to the power plant, the sewer plant, and the gas plant by independent underground lines.  Is it possible to do it so that none of these lines cross over each other?</p>
+
+<p>In class, I tried to draw a solution, and came up with a drawing very like the following, stolen from <a href="http://www.science4all.org/article/eulers-formula-and-the-utilities-problem/">this site about the problem</a>:</p>
+
+<p><img src="../The-Utilities-Problem-Bad-Solution.png" alt="Attempt at solving the three utilities problem" /></p>
+
+<p>However, this just shows one attempt at connecting them up fails; it seems very hard to prove that no such attempt could succeed, as there are lots of ways you could try to draw it.  However, later in this lecture we will show that it is impossible.  But first</p>
+
+<h2 id="a-notational-interlude">A notational interlude:</h2>
+
+<p>In the graph we are trying to draw in the Three Utilities Problem, we have two different types of vertices: the houses, and the utility factories.  The graph only has edges between vertices of one type and vertices of the other type.  Similar graphs occur frequently, and so we make the following definition:</p>
+
+<p>We have typically viewed graphs as drawings in the plane, with the vertices as dots and the edges as lines between them.  Different choices of drawings of them same graph can look very different (as we saw with the Petersen graph).   One thing that is convenient is to have drawings where the edges never cross (we might wonder if the crossing is a vertex).  We are naturally then led to the following definition:</p>
+
+<h1 id="definition">Definition</h1>
+
+<p>A graph is <em>planar</em> if it can be drawn in the plane (<script type="math/tex">\mathbb{R}^2</script>) so that none of the edges cross.</p>
+
+<h1 id="definition-1">Definition</h1>
+
+<p>A graph is <em>bipartite</em> if its vertices can <script type="math/tex">V(\Gamma)</script> and can be separated into two sets, <script type="math/tex">U</script> and <script type="math/tex">W</script>, so that any edge of goes between a vertex of <script type="math/tex">U</script> and a vertex of <script type="math/tex">W</script>.</p>
+
+<p>The very first picture on the <a href="https://en.wikipedia.org/wiki/Bipartite_graph">wikipedia entry</a> is the picture you should have in your head.</p>
+
+<h1 id="example">Example</h1>
+
+<p>The 4 cycle <script type="math/tex">C_4</script> is bipartite, while the 3 or 5 cycles are not.</p>
+
+<p>A special case is when every vertex of <script type="math/tex">U</script> and is connected to every vertex of <script type="math/tex">W</script> – i.e., the graph has many edges as it can while still being simple and bipartite.</p>
+
+<h1 id="definition-2">Definition</h1>
+
+<p>The complete bipartite graph <script type="math/tex">K_{m,n}</script> has <script type="math/tex">m+n</script> vertices, split into a set <script type="math/tex">U</script> with <script type="math/tex">m</script> vertices and <script type="math/tex">W</script> with <script type="math/tex">n</script> vertices.  For every <script type="math/tex">u\in U</script> and <script type="math/tex">w\in W, K_{m,n}</script> has exactly one edge.</p>
+
+<h1 id="back-to-the-puzzle">Back to the puzzle:</h1>
+
+<p>Returning back to the Utilities Problem, it should be fairly clear that it is equivalent to the following question: Is <script type="math/tex">K_{3,3}</script> is planar?   Our next goal is to prove that it is not.</p>
+
+<h2 id="a-tiny-bit-of-topology">A tiny bit of topology</h2>
+
+<p>Since we’re trying to draw it in the plane, we are secretly starting to do a little bit of topology.  This is not a module on topology, and we will do as little as we can get away with, but it may help to highlight slightly where we use a little.  In particular, the main idea of the proof will use some form of the <a href="https://en.wikipedia.org/wiki/Jordan_curve_theorem">Jordan Curve Theorem</a>, which basically says that if we draw a simple closed curve (i.e., a circle) in the plane, it cuts it into two pieces, an inside and an outside.  This certainly sounds intuitively obvious, and would go without question to anyone besides a mathematician – think about some of the nasty curves you encountered in Analysis!</p>
+
+<h1 id="main-idea-of-the-proof">Main idea of the proof</h1>
+
+<p>The problem with trying to show a graph is nonplanar is that it seems at first glance that there are tons of possible ways to try to draw it in the plane, and so the proof would have a huge number of different cases, and it would be tricky to make sure you’d covered them all.  The main idea of the proof is to use the Jordan curve theorem as a way to eliminate a lot of cases and organize the remaining ones.  This idea is widely applicable, and in previous versions of the course was referred to as the “planarity algorithm”, although we will not formalise it to the level of an algorithm.</p>
+
+<p>The idea is the following: suppose that a graph <script type="math/tex">\Gamma</script> was planar, and consider some closed walk <script type="math/tex">W</script> in <script type="math/tex">\Gamma</script> that doesn’t repeat any vertices.  Then if we draw <script type="math/tex">\Gamma</script> in the plane, then <script type="math/tex">W</script> will be a circle, and so by the Jordan curve theorem every vertex or edge not in <script type="math/tex">W</script> must either be on the inside or outisde of <script type="math/tex">W</script>.  One can then do a case-by-case analysis placing each vertex or edge inside or outside.</p>
+
+<p>Obviously, the fewer vertices and edges that aren’t contained in <script type="math/tex">W</script>, the fewer cases our proof will have, and so in the best case )and the only ones we will consider) we take <script type="math/tex">W</script> to be a Hamiltonian cycle.</p>
+
+<h1 id="proof-that-k_33-isnt-planar">Proof that <script type="math/tex">K_{3,3}</script> isn’t Planar</h1>
+
+<p>Let the vertices <script type="math/tex">a,b,c</script> be coloured red and vertices <script type="math/tex">x,y,z</script> be coloured blue.  The path <script type="math/tex">a-x-b-y-c-z-a</script> is a Hamiltonian cycle, that we draw as a circle in the plane, as shown below:</p>
+
+<p><a href="http://presheaf.com/?d=d1f3c3z5i342j3s47402p5e1l6h1k2f2i"><img src="http://presheaf.com/cache/d1f3c3z5i342j3s47402p5e1l6h1k2f2i.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>This contains 6 of the 9 edges of <script type="math/tex">K_{3,3}</script>; we need to add the edges <script type="math/tex">a-y, b-z</script> and <script type="math/tex">c-x</script>.  The edge <script type="math/tex">a-y</script> could be drawn inside the circle or outside, suppose we draw it inside, as shown below, with the added edge dashed.</p>
+
+<p><a href="http://presheaf.com/?d=d6p443t5v3w101e1r2g1u1x156y6870"><img src="http://presheaf.com/cache/d6p443t5v3w101e1r2g1u1x156y6870.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>Then on the inside of the circle, <script type="math/tex">x</script> and <script type="math/tex">c</script> are on different sides of the line <script type="math/tex">a-y</script>, and so the edge connecting them must go outside the circle.  The added edge could go around the right of the circle, as shown below here:</p>
+
+<p><a href="http://presheaf.com/?d=d2s4y614j59131z1j4ul375e2s1r6l4g"><img src="http://presheaf.com/cache/d2s4y614j59131z1j4ul375e2s1r6l4g.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>or around the left, as shown here:</p>
+
+<p><a href="http://presheaf.com/?d=d4i6r67d2b5z2u3p6ao1g42453q176z"><img src="http://presheaf.com/cache/d4i6r67d2b5z2u3p6ao1g42453q176z.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>But now <script type="math/tex">b</script> and <script type="math/tex">z</script> are different sides of <script type="math/tex">a-y</script> inside the circle, and on different sides of <script type="math/tex">c-x</script> outside the circle, and so cannot be connected without making two edges cross.</p>
+
+<p>If we had began by drawing <script type="math/tex">a-y</script> outside the circle, then we would have had to draw <script type="math/tex">c-x</script> inside the circle, and had the same problem with being able to draw the last line; as shown here:</p>
+
+<p><a href="http://presheaf.com/?d=d1015p1r712k18714i5l9282s1n621d"><img src="http://presheaf.com/cache/d1015p1r712k18714i5l9282s1n621d.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<h1 id="an-unnecessary-case-and-steoreographic-projection">An unnecessary case and steoreographic projection</h1>
+
+<p>In the proof as presented, we do two cases that seem essentially identical – namely, whether the first edge <script type="math/tex">a-y</script> was drawn inside the circle or outside the circle.  In a good proof you don’t want to consider more cases than necessary, so it’s worth stopping to see if these cases are really “the same” or not.</p>
+
+<p>At first glance, the inside and outside of the circle seem to appear very different: the inside has finite area, while the outside has infinite area.  However, here’s a slightly different situation where the inside and outside are obviously interchangable: replace <script type="math/tex">\R^2</script> with the sphere <script type="math/tex">S^2</script>, and draw the circle as the equator.  Then the “inside” is the northern hemisphere, and the “outside” is the southern hemisphere, and obviously we can just do a reflection to interchange them.</p>
+
+<p>It seems like a huge leap to replace the plane with the sphere, but the sphere is really just the plane with one additional point!  Put another way, suppose we could draw <script type="math/tex">\Gamma</script> on the sphere.  Our drawing would miss at least point, and if we cut open the sphere at that one point we could stretch the sphere out and lay it flat on the plane, giving a drawing of <script type="math/tex">\Gamma</script> on the plane.</p>
+
+<p>That sounded vague, but one way it can be made precise is the following: through <a href="https://en.wikipedia.org/wiki/Stereographic_projection">stereographic projection</a>, which the wikipedia page makes look complicated, but is really just this picture:</p>
+
+<p><img src="../stereographicprojection.jpg" alt="Stolen stereographic projection picture" /></p>
+
+<p>Draw the sphere as the unit sphere centerred at the origin, so the North pole is the point <script type="math/tex">N=(0,0,1)</script>.  Then, for any point <script type="math/tex">Z\neq N</script> on the sphere, there is a unique line through <script type="math/tex">N</script> and <script type="math/tex">Z</script>.  That line will meet the <script type="math/tex">xy</script> plane in a unique point <script type="math/tex">z</script>.  Similarly, given any point <script type="math/tex">z</script> in the <script type="math/tex">xy</script> plane, the line through <script type="math/tex">z</script> and <script type="math/tex">N</script> will meet the sphere in one other point <script type="math/tex">Z</script>.  This gives a bijection between points on the plane, and points on there sphere (except for the north pole).</p>
+
+<p>If discussion above we slightly lacking, there are lots of <a href="https://www.youtube.com/watch?v=6JgGKViQzbc">fun videos</a> showing (variations of) stereographic projection on youtube.  I mentioned in particular <a href="https://www.youtube.com/watch?v=VX-0Laeczgk">Henry Segerman’s videos</a> that illustrated this using shadows and 3-d printed spheres.</p>
+
+<h2 id="back-to-planar-graphs">Back to planar graphs</h2>
+
+<p>If that digression into topology seemed long and pointless, the upshot is that if we’re trying to prove a Hamiltonian graph is nonplanar, we can treat the inside and the outside of the circle as equivalent, and so when we try to add the very first edge we may as well put it inside.  This gives us one less choice, and so makes our proofs about half as long!  We will use this trick to show that:</p>
+
+<h1 id="the-complete-graph-k_5-isnt-planar">The complete graph <script type="math/tex">K_5</script> isn’t planar</h1>
+
+<p>The proof is similar, in that we begin by picking a Hamiltonian cycle, say, <script type="math/tex">a-b-c-d-e-a</script>, and drawing this as a cirlce in the plane, and then try to add the remaining edges.  <script type="math/tex">K_5</script> has <script type="math/tex">5\cdot 4/2=10</script> edges, and 5 are contained in the cycle, so we have 5 more edges to add – <script type="math/tex">a-c, a-d, b-d,b-e</script> and <script type="math/tex">c-e</script>.</p>
+
+<p>Since the inside and outside of the circle are equivalent, we will assume the first edge <script type="math/tex">a-c</script> is drawn <em>inside</em> the circle, giving us the following picture:</p>
+
+<p><a href="http://presheaf.com/?d=dq3e1p4v556ry3y6sf702oq317343"><img src="http://presheaf.com/cache/dq3e1p4v556ry3y6sf702oq317343.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>It may be tempting to next consider the edge <script type="math/tex">a-d</script>, but this could be drawn either inside or outside the circle, and so we’d have to start considering cases.  We get a shorter, cleaner proof if we now move on to the vertex <script type="math/tex">b</script>.</p>
+
+<p>The vertex <script type="math/tex">b</script> is separated from <script type="math/tex">d</script> and <script type="math/tex">e</script> on the inside of the circle by the line <script type="math/tex">ac</script>, and hence the edges <script type="math/tex">b-e</script> and <script type="math/tex">b-d</script> must be drawn on the outside of the circle.  These edges separate <script type="math/tex">a</script> from <script type="math/tex">d</script> on the outside of the circle, and so this must be drawn inside, giving the following picture:</p>
+
+<p><a href="http://presheaf.com/?d=d5f4c451j4lgx3zy171b161j6f52i"><img src="http://presheaf.com/cache/d5f4c451j4lgx3zy171b161j6f52i.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>But now we cannot add the final <script type="math/tex">c-e</script>, as <script type="math/tex">c</script> and <script type="math/tex">e</script> are separated from each other on both the outside and the inside of the circle.<script type="math/tex">\square</script></p>
+
+<h1 id="generalization-the-planarity-algorithm-for-hamiltonian-graphs">Generalization: The planarity algorithm for Hamiltonian Graphs</h1>
+
+<p>The arguments we made to show <script type="math/tex">K_{3,3}</script> and <script type="math/tex">K_5</script> aren’t planar can be adapted to easily give a criterion for whether or not <em>any</em> Hamiltonian graph is planar or not.</p>
+
+<p>Suppose <script type="math/tex">G</script> is Hamiltonian, and choose a Hamiltonian cycle <script type="math/tex">C</script>;  If <script type="math/tex">G</script> is planar, then <script type="math/tex">C</script> will be drawn as a circle, and every other edge must either lie entirely inside or outside the graph.  Now if we pick two edges <script type="math/tex">e=ab</script> and <script type="math/tex">f=xy</script> that are not part of the cycle, two things can happen depending on the ordering of <script type="math/tex">a,b,x,y</script> along the circle:</p>
+
+<ol>
+  <li>If the vertices of <script type="math/tex">e</script> and <script type="math/tex">f</script> do not interlace (e.g. <script type="math/tex">abxy, yxab, xbay</script>), or if they share a vertex (e.g. <script type="math/tex">x=a</script>); then <script type="math/tex">e</script> and <script type="math/tex">f</script> may both be drawn inside or outside the circle without crossing.</li>
+  <li>If the vertices of <script type="math/tex">e</script> and <script type="math/tex">f</script> do interlace (e.g. <script type="math/tex">axby, xayb, yaxb</script>), then if <script type="math/tex">e</script> and <script type="math/tex">f</script> are drawn both inside or both outside the circle, they most cross.</li>
+</ol>
+
+<p>So, to see if the whether or not <script type="math/tex">G</script> is Hamiltonian, we must look at all the edges that aren’t in <script type="math/tex">C</script>, and see if we can split them into two sets, one to be drawn inside, and one to be drawn outside, so that it can be done without crossing.  It turns out there’s a slick way to do this.</p>
+
+<h1 id="definition-crossing-graph">Definition: Crossing graph</h1>
+
+<p>Let <script type="math/tex">G</script> be a Hamiltonian graph and <script type="math/tex">C</script> and Hamiltonian cycle in <script type="math/tex">G</script>.  The <em>crossing graph</em> of <script type="math/tex">G</script> and <script type="math/tex">C</script>, denoted Cross(<script type="math/tex">G, C</script>), has vertices the edges of <script type="math/tex">G</script> that aren’t in the cycle, and an edge between two vertices <script type="math/tex">p</script> and <script type="math/tex">q</script> if the vertices of the corresponding edges interleave, that is, <script type="math/tex">p</script> and <script type="math/tex">q</script> are adjacent if they cannot be drawn on the same side of the cycle <script type="math/tex">C</script> without crossing.</p>
+
+<h1 id="the-planarity-algorithm-for-hamiltonian-graphs">The Planarity Algorithm for Hamiltonian graphs</h1>
+<p>Suppose <script type="math/tex">G</script> is Hamiltonian, with <script type="math/tex">C</script> a Hamiltonian cycle.  Then <script type="math/tex">G</script> is planar if and only if Cross(<script type="math/tex">G, C</script>) is bipartite.</p>
+
+<h1 id="proof">Proof:</h1>
+
+<p><script type="math/tex">G</script> is bipartite if and only if we can split the edges not in <script type="math/tex">C</script> into two sets, inside and outside, so that we can draw each set entirely inside or outside <script type="math/tex">C</script> without crossing.  But two edges cross if and only if their corresponding vertices in Cross(<script type="math/tex">G, C</script>) are adjacent.  So trying to draw the edges of <script type="math/tex">G</script> without crossing is exactly trying to</p>
+
+<h1 id="example-1">Example:</h1>
+
+<p>One can check that Cross(<script type="math/tex">K_{3,3}</script>) will be a three cycle for any choice of Hamiltonian cycle, and Cross(<script type="math/tex">K_5</script>) will be a five cycle; neither of which is Hamiltonian.</p>
+
+<h1 id="example-2">Example:</h1>
+
+<p>Consider the graph <script type="math/tex">H</script> shown in the following picture:</p>
+
+<p><img src="../PlanarH.svg" alt="A planar graph H" /></p>
+
+<p>It’s obviously Hamiltonian with cycle <script type="math/tex">abcxyza</script>, and its crossing graph with respect to this cycle is the following:</p>
+
+<p><img src="../CrossH.svg" alt="the crossing graph of H" /></p>
+
+<p>For example, in <script type="math/tex">H</script> the edge <script type="math/tex">ax</script> crosses the three edges <script type="math/tex">cy, cz</script> and <script type="math/tex">bz</script>, and so in Cross(<script type="math/tex">H</script>), the vertex <script type="math/tex">ax</script> is adjacent to those vertices.</p>
+
+<p>It is clear from the picture that Cross(<script type="math/tex">H, abcxyza</script>) is bipartite, for instance, we may colour <script type="math/tex">ax, bx</script> and <script type="math/tex">ay</script> red, and the other three vertices blue.  But this tells us how to draw the graph of <script type="math/tex">H</script> in the plane – we draw all the red vertices inside the cycle, and the blue vertices outside the cycle, giving the following:</p>
+
+<p><img src="../HdrawnPlanar.svg" alt="A planar drawing of H" /></p>
+
+<p>Last session we proved that the graphs <script type="math/tex">K_{3,3}</script> and <script type="math/tex">K_5</script> are not planar.  We now discuss Kuratowski’s theorem, which states that, in a well defined sense, having a <script type="math/tex">K_{3,3}</script> or a <script type="math/tex">K_5</script> are the <em>only</em> obstruction to being non-planar.</p>
+
+<p>We begin with some two simple observations.</p>
+
+<h1 id="observation-1">Observation 1</h1>
+
+<p>If <script type="math/tex">H</script> is a subgraph of <script type="math/tex">G</script>, and <script type="math/tex">H</script> is not planar, then <script type="math/tex">G</script> is not planar.</p>
+
+<h1 id="proof-1">Proof</h1>
+
+<p>If we could draw <script type="math/tex">G</script> in the plane, it would produce a drawing of <script type="math/tex">H</script> in the plane, a contradiction.  <script type="math/tex">\square</script></p>
+
+<p>As an immediate corrolary, we see that <script type="math/tex">K_n</script> is not planar for <script type="math/tex">n\geq 5</script>, as all such complete graphs contain <script type="math/tex">K_5</script> as a subgraph; similarly, <script type="math/tex">K_{m,n}</script> are not planar, with <script type="math/tex">m,n\geq 3</script>.</p>
+
+<p>Our second observation is the following: suppose we took a graph <script type="math/tex">\Gamma</script>, and made a new graph <script type="math/tex">\Gamma^\prime</script> by adding one vertex of degree 2 in the middle of one of the edges of <script type="math/tex">\Gamma</script>.  Then drawing <script type="math/tex">\Gamma^\prime</script> is basically the same as drawing <script type="math/tex">\Gamma</script>, and then sticking an extra dot on an edge.  Hence, <script type="math/tex">\Gamma^\prime</script> will be planar if and only if <script type="math/tex">\Gamma</script> was.</p>
+
+<p>We now make this precise:</p>
+
+<h1 id="definition-3">Definition</h1>
+
+<p>We say that <script type="math/tex">\Gamma^\prime</script> is a subdivision of <script type="math/tex">\Gamma</script> if it is obtained from <script type="math/tex">\Gamma</script> by repeatedly choosing an edge <script type="math/tex">e</script> and splitting it into two by adding a new vertex, as in the following picture:</p>
+
+<p><img src="../TeXpictures/split.png" alt="Splitting/Joining an edge" /></p>
+
+<h1 id="observation-2">Observation 2</h1>
+<p>Suppose that <script type="math/tex">\Gamma^\prime</script> is a subdivision of <script type="math/tex">\Gamma</script>.  Then <script type="math/tex">\Gamma^\prime</script> is planar if and only if <script type="math/tex">\Gamma</script> is.</p>
+
+<h1 id="example-3">Example</h1>
+<p>The following graph <script type="math/tex">G</script> is nonplanar, since it is obtained from <script type="math/tex">K_{3,3}</script> by subdividing a single edge.</p>
+
+<p><img src="../TeXpictures/K33homeo.png" alt="K33 Subdivision" /></p>
+
+<p>Putting together the two lemmas, we see that if <script type="math/tex">G</script> has a subgraph <script type="math/tex">H</script>, so that <script type="math/tex">H</script> is a subdivision of a non-planar graph (like <script type="math/tex">K_5</script> or <script type="math/tex">K_{3,3}</script>), then we <script type="math/tex">G</script> isn’t planar.  We illustrate this now in an exmaple.</p>
+
+<h1 id="example-the-petersen-graph-is-not-planar">Example: The Petersen graph is not planar</h1>
+
+<p><img src="../TeXpictures/PetersenNonPlanar.png" alt="PetersenSubgraph" /></p>
+
+<p>The subgraph drawn with thick edges (containing all but two of the edges in the Petersen graph) is homeorphic to <script type="math/tex">K_{3,3}</script>.  we have drawn three vertices blue and three vertices red to highlight the vertices of <script type="math/tex">K_{3,3}</script>.  The nonhighlighted edges are in the subgraph, but they are the ones that are forgetten to show that the highlighted graph is homeomorphic to <script type="math/tex">K_{3,3}</script>.</p>
+
+<h1 id="kuratowskis-theorem">Kuratowski’s Theorem</h1>
+
+<p>A graph <script type="math/tex">G</script> is nonplanar if and only if it contains a subgraph homeomorphic to <script type="math/tex">K_5</script> or <script type="math/tex">K_{3,3}</script>.</p>
+
+<p>Our two observations, together with this morning’s result that <script type="math/tex">K_{3,3}</script> and <script type="math/tex">K_5</script> are nonplanar, prove the “if” direction.  The “only if” direction is much harder, and we will not prove it.</p>
+
+<p>However, we will only use the “only if” direction implicitly.  Using the “only if” direction explicitly would amount to prove that some graph was planar by showing it had no subgraphs that were subdivisions of <script type="math/tex">K_5</script> or <script type="math/tex">K_{3,3}</script>, which we would be quite laborious.  We have a much easier way to prove that a graph <em>is</em> planar: drawing it in the plane.</p>
+
+<p>We will however, use the “only if” direction implicitly in the following way.  Suppose we have a graph <script type="math/tex">G</script>, and we want to determine if <script type="math/tex">G</script> is planar or not.  We can try to prove it is planar by trying to draw it in the plane, and we can try to prove it is not planar by finding a subgraph of <script type="math/tex">G</script> that is homeomorphic to either <script type="math/tex">K_{3,3}</script> or <script type="math/tex">K_5</script>.  The “only if” direction of Kuratowski’s theorem tells us that one or the other of these attempts will <em>always</em> work.  Thus, we have a practical method to determine whether or not a graph is planar or not – try to draw it in the plane.  If you find this difficult, and begin to expect that it isn’t possible, start looking for a subgraph homeomorphic to either <script type="math/tex">K_5</script> or <script type="math/tex">K_{3,3}</script>, which would prove it can’t be drawn on the plane.</p>
+
+<h2 id="graphs-on-other-surfaces">Graphs on other surfaces</h2>
+
+<p>We now transition to drawing graphs on other surfaces.  In lecture, we had some <a href="http://slides.com/pauljohnson/deck-2#/">slides providing pictures</a> for the beginning of this discussion; a few, but not all, of those images are in the body of these notes now.</p>
+
+<p>Trying to draw graphs on surfaces can be fun, but it seems like a rather unmotivated question to consider, so we began with motivating it by videogames.  Many videogames (pacman, asteroids, overhead RPGs like the early Final Fantasy games) take place on a rectangle screen:</p>
+
+<p><img src="../Slides/Pictures/chronostatic.gif" alt="Videogame map" /></p>
+
+<p>To avoid making the world have an “edge”, the result will often happen: if a character moves off the right of the screen it will reappear at the edge of the left screen, and similarly if a character moves off the top of the screen, it reappears on the corresponding place on the bottom of the screen.</p>
+
+<p>This set-up is used to simulate the surface of a planet.  However, if one traces through the result of these identifications, one sees that the surface is a torus:</p>
+
+<p><img src="../Slides/Pictures/chronofolding.gif" alt="map folding" /></p>
+
+<h1 id="definition-4">Definition</h1>
+
+<p>A “video-game graph” is one that “locally looks like” a part of graph paper.</p>
+
+<h1 id="motivating-question">Motivating Question</h1>
+
+<p>If videogame designers were more clever, could they put a finite videogame graph on the sphere?  Can you prove that it isn’t possible?</p>
+
+<h2 id="drawing-graphs-on-the-torus">Drawing graphs on the torus</h2>
+
+<p>If we wanted to draw a graph on the sphere, we could do this physically by taking a balloon and a felt pen, but it would be a little awkward to turn in or mark homeworks this way.  Luckily, we saw last time that, using stereographic projection, drawing a graph on the sphere is equivalent to being able to draw it on the plane.</p>
+
+<p>Similarly, we could draw graphs on torus by getting donuts, and writing on them with icing sugar.  But again, this is rather impractical, and we’d like a way to represent drawing a graph on a torus that is conveniently done on a piece of paper.</p>
+
+<p>The videogame / paper-folding discussion shows us how to do this.  We draw a square to represent the torus.  On the top and bottom border we draw one arrow in the same direction, to signify that these edges will be identified (this is how the paper was folded, or what a character does in the videogame).  We do similar with the side borders, with two arrows.</p>
+
+<p>Then we can draw the graph in the square, with the following added options – if a drawn edge reaches the left (right) border, it continues at the same spot on the right (left) border, and similarly with the top/bottom borders.</p>
+
+<h1 id="example-4">Example</h1>
+
+<p><script type="math/tex">K_5</script> and <script type="math/tex">K_6</script> cannot be drawn on the plane, but they can be drawn on the torus as follows:</p>
+
+<p><img src="../TeXpictures/K5K6torus.png" alt="K5 and K6 on the torus" /></p>
+
+<p>The graph on the left shows <script type="math/tex">K_5</script> on the torus.  The picture on the right has the same drawing of <script type="math/tex">K_5</script> in black, but in red has added an extra vertex and 5 extra edges incident to it to make a <script type="math/tex">K_6</script>.  There are appear to be 4 red vertices, at each corner of the square, but since all the corners get identified by the folding, they correspond to the same point of the torus.</p>
+
+<h1 id="challenge">Challenge</h1>
+
+<p>Draw <script type="math/tex">K_7</script> on the torus.</p>
+
+<p>It turns out that <script type="math/tex">K_8</script> cannot be drawn on the torus; we will prove this later.</p>
+
+<h2 id="what-comes-next">What comes next?</h2>
+<p>What other surfaces other than the sphere and torus are possible?  One possibility is just adding  “more holes”; this produces the “donut with <script type="math/tex">g</script> holes”, more formally known as the “suface of genus <script type="math/tex">g</script>”.</p>
+
+<p>You won’t have to work with surfaces of higher genus, but it is worth knowing that this is an active area of research and investigation.  It turns out (try to prove it!  It’s not hard…) that given any finite graph <script type="math/tex">\Gamma</script>, there is some <script type="math/tex">g</script> so that <script type="math/tex">\Gamma</script> can be drawn on a surface of genus <script type="math/tex">g</script> without the edges crossing.  The <em>genus</em> of a graph <script type="math/tex">\Gamma</script> is defined to be the lowest <script type="math/tex">G</script> such that this can be done.</p>
+
+<h1 id="nonorientable-surfaces">Nonorientable Surfaces</h1>
+
+<p>Although you won’t have to work with surfaces of higher genus, you will have to be able to work with a couple of other surfaces.  We will end this lecture by introducing the Mobius band:</p>
+
+<h2 id="unorientable-surfaces">Unorientable surfaces</h2>
+
+<p>In this half of the lecture, we introduce the real projective plane, the simplest closed compact unorientable surface.</p>
+
+<p>Before we do that, it is easiest to review an unorientable surface with boundary that may be more familiar: the Mobius band.</p>
+
+<h1 id="the-mobius-band">The Mobius band</h1>
+
+<p>Suppose one has a strip of paper and glues the opposite edges together in the natural way – this makes a cylinder.</p>
+
+<p>If instead, one glued the ends together with half a twist, one would get the Mobius band:</p>
+
+<p><img src="../Slides/Pictures/mobiusglue.jpg" alt="mobius band glue" /></p>
+
+<p>The mobius band is not the same topological space as the cylinder.  One way to see this is that it is <em>unorientable</em> – there is not a consistent notion of left and right on the Mobius band.  If you start at one point on the Mobius band, and travel along it until you jump across the other side of the identification, you will eventually return to where you started.  However, your left and right will have been interchanged!  This is seen in the following pictures, <a href="https://haggisthesheep.wordpress.com/2009/06/15/mobius-strips/">stolen from this blog post</a>:</p>
+
+<p><img src="../Slides/Pictures/mobiusunorientable.jpg" alt="courtesy haggisthesheep.blogspot.com" /></p>
+
+<p>The creature started out, his right hand was blue, but when he returns from his trip around the mobius band it is now his left hand that is blue!</p>
+
+<h2 id="dual-graphs">Dual graphs</h2>
+
+<p>In the examples at the very beginning of the course, we got a graph from a drawing on the sphere: the Risk board, or more generally, any map.</p>
+
+<p>The countries (or counties or states or whatever region we are working with) are the vertices, and two countries are adjacent if they share a border.</p>
+
+<p>This is different from how we have been thinking about drawing graphs on surfaces – for us, the places where more than two countries meet would be the vertices, and the borders would again be edges.  But both of these graphs are coming from the same drawing on the sphere, and so must be related somehow; the concept of <em>dual graphs</em> makes this precise.</p>
+
+<h1 id="definition-5">Definition</h1>
+
+<p>Let <script type="math/tex">\Gamma</script> be drawn on a surface <script type="math/tex">S</script>.  The connected components of <script type="math/tex">S\setminus\Gamma</script> – i.e., the pieces we would have if we cut <script type="math/tex">S</script> along <script type="math/tex">\Gamma</script> – are called <em>faces</em></p>
+
+<p>Note: by the Jordan curve theorem, on a sphere, each face will just be a disk.  However, this need not be true on a regular surface – for instance, we can get a cylinder as a connected region on the Torus, and the Mobius band as a connected region on the projective plane.</p>
+
+<h1 id="definition-6">Definition</h1>
+
+<p>Let <script type="math/tex">\Gamma</script> be drawn on a surface <script type="math/tex">S</script>, with vertices <script type="math/tex">v</script>.  The <em>dual graph</em> of <script type="math/tex">\Gamma, S</script> is the graph with a vertex for each face of <script type="math/tex">\Gamma, S</script>, and an edge for each edge of <script type="math/tex">e\in E(\Gamma)</script>, that connects the two faces that <script type="math/tex">e</script> separates.</p>
+
+<p>It is not hard to see that the faces of the dual graph are the vertices of the original graph, and hence that the dual of the dual graph of <script type="math/tex">\Gamma</script> is the original graph <script type="math/tex">\Gamma</script> back.</p>
+
+<h1 id="eulers-theorem">Euler’s Theorem</h1>
+
+<p>Let \(\Gamma\) be a graph drawn on the sphere, and suppose that <script type="math/tex">\Gamma</script> has <script type="math/tex">v</script> vertices, <script type="math/tex">e</script> edges, and <script type="math/tex">f</script> faces.  Then <script type="math/tex">v-e+f=2</script>.</p>
+
+<h1 id="proof-idea">Proof idea:</h1>
+
+<p>One way to prove it is the following: pick an edge <script type="math/tex">e</script> on <script type="math/tex">\Gamma</script>.  If we delete an edge from <script type="math/tex">\Gamma</script>, we will (usually) merge two faces into one, and thus have one less edge and one less face; this does not change <script type="math/tex">v-e+f</script>, and gives us a simpler graph where we know <script type="math/tex">v-e+f=2</script> by induction.</p>
+
+<p>The only case where deleting the edge <script type="math/tex">e</script> doesn’t merge two faces into one is when both sides of the edges are actually the same face; in this case, removing <script type="math/tex">e</script> disconnects the graph <script type="math/tex">\Gamma</script>.  One can compute inductively from the two pieces, or perhaps more simply, simply contract the edge <script type="math/tex">e</script> in this case, leaving the number of faces unchanged, and reducing the number of edges and vertices by one; again, this doesn’t chave <script type="math/tex">v-e+f</script>, and will give us a simpler graph where we know <script type="math/tex">v-e+f=2</script> by induction.</p>
+
+<h2 id="applications-of-euler-characteristic">Applications of Euler characteristic</h2>
+
+<p>Euler’s theorem can be very useful in proving results about graphs on the sphere.  It’s a bit awkward to use by itself – it contains three variables, <script type="math/tex">v, e</script> and <script type="math/tex">f</script>, so it is most useful when we already know some relations between these variables.  This may be best illustrated by our motivating example:</p>
+
+<h1 id="theorem">Theorem</h1>
+
+<p>It is impossible to draw a sphere with a videogame graph.</p>
+
+<h1 id="proof-2">Proof</h1>
+
+<p>Recall that in a videogame graph, every vertex had degree 4, and each face was a square.</p>
+
+<p>Suppose that we had such a graph drawn on the sphere; Euler’s theorem gives us <script type="math/tex">v-e+f=2</script>; we need to use our other knowledge about the graph to get a contradiction.</p>
+
+<p>How can we use that every vertex has degree 4?  The handshaking lemma!  Since every vertex has degree 4, the sum of the degrees of the vertices is just <script type="math/tex">4v</script>.  So the Handshaking Lemma just says <script type="math/tex">4v=2e</script>, and hence <script type="math/tex">e=2v</script>.</p>
+
+<p>How can we use that every face has four sides?  We can do something just like the handshaking lemma, and count the number of times a face meets an edge.  On the one hand, each edge meets two faces, and so there are <script type="math/tex">2e</script> places that an edge meets a face.  On the other hand, each face meets four edges, and so we see there are <script type="math/tex">4f</script> times a face meets an edge, and so we have that <script type="math/tex">2e=4f</script>, or <script type="math/tex">e=2f</script>.</p>
+
+<p>Putting <script type="math/tex">e=2v</script> and <script type="math/tex">e=2f</script> together, we see that <script type="math/tex">f=v</script>, and so <script type="math/tex">v-e+f=v-2v+v=0</script>, which is a direct contradiction of Euler’s Formula <script type="math/tex">,\quad \square</script></p>
+
+<p>It’s worth noting that “handshaking between edges and faces” actually <em>is</em> the handshaking lemma for the dual graph.</p>
+
+<p>To generalize this, we note that we have three sources of relationships between <script type="math/tex">v, e</script> and <script type="math/tex">f</script> for a planar graph:</p>
+
+<ol>
+  <li>Euler’s Formula</li>
+  <li>Handshaking between vertices and edges</li>
+  <li>Handshaking between edges and faces</li>
+</ol>
+
+<p>These three relations can work together to prove a lot.  We give one more example now – another proof that <script type="math/tex">K_5</script> and <script type="math/tex">K_{3,3}</script> aren’t planar.  Yet another example can be found on the last homework set – figuring out how many pentagons a football has.</p>
+
+<h1 id="application-k_5-and-k_33-arent-planar">Application: <script type="math/tex">K_5</script> and <script type="math/tex">K_{3,3}</script> aren’t planar</h1>
+
+<p>Let’s try to give another proof that <script type="math/tex">K_5</script> and <script type="math/tex">K_{3,3}</script> aren’t planar using Euler’s formula.</p>
+
+<p>First, let’s show <script type="math/tex">K_5</script> isn’t planar.  We know explicitly that <script type="math/tex">K_5</script> has 5 vertices and 10 edges, so if it were drawn on the sphere we would have</p>
+
+<script type="math/tex; mode=display">2=v-e+f=5-10+f=f-5</script>
+
+<p>and so it would have to have 7 faces.  To get a contradiction, we need another way to get information about how many faces the drawing would have, which we can do via handshaking.  <script type="math/tex">K_5</script> has no multiple edges or loops, and so the smallest number of edges a face could have is 3.  Thus, handshaking gives us</p>
+
+<p><script type="math/tex">2e=\sum_{f \text{ face} } d(f)\geq \sum_f 3=3f</script>
+i.e., <script type="math/tex">2e\geq 3f</script>.  But we know <script type="math/tex">e=10</script> and <script type="math/tex">f=7</script>, so we have a contradiction.</p>
+
+<p>The argument for <script type="math/tex">K_{3,3}</script> is similar; we know it has 6 vertices and 9 edges, so if it were drawn on the plane it would need to have 5 faces.  <script type="math/tex">K_{3,3}</script> is simple, so again we have that each face has at least three sides, but this isn’t strong enough for our purposes.  But, since <script type="math/tex">K_{3,3}</script> is bipartite, it can’t have any cycles of length three (or any odd number for that matter).  Thus, every face of any drawing of <script type="math/tex">K_{3,3}</script> must have at least 4 sides.  Handshaking between faces and edges then gives <script type="math/tex">2e\geq 4f</script>, but there are 9 edges and 5 faces, a contradiction.  <script type="math/tex">\square</script></p>
+
+<h1 id="application-footballs-have-12-pentagons">Application: Footballs have 12 pentagons.</h1>
+<p>On a football, every vertex is trivalent, but there are two types of faces, pentagons and hexagons.  Let <script type="math/tex">P</script> be the number of pentagons, and <script type="math/tex">H</script> the number of hexagons.  Then <script type="math/tex">f=P+H</script>, so Euler’s theorem gives <script type="math/tex">V-E+P+H=2</script>.</p>
+
+<p>Using handshaking between vertices and edges gives <script type="math/tex">3V=2E</script>, and using handshaking between faces and edges gives <script type="math/tex">5P+6H=2E</script>.  Thus, we see <script type="math/tex">6V-6E=-2E=-5P-6H</script>, where the first equality is vertex-edge handshaking and the second vertex-face.  Multiplying Euler’s theorem by 6 gives <script type="math/tex">6V-6H+6P+6H=12</script>, and substituting in our deduction from handshaking gives <script type="math/tex">P=12</script>.</p>
+
+<h2 id="generalization-euler-characteristic-and-the-beginnings-of-topology">Generalization: Euler characteristic and the beginnings of topology</h2>
+
+<p>This is more just general mathematical culture than something you would see on the exam.</p>
+
+<p>We have seen for that graphs drawn on the sphere, we have <script type="math/tex">v-e+f=2</script>.  Given that we’ve discussed drawing graphs on other surfaces, it becomes a natural question to ask if there’s a similar relation for <script type="math/tex">v-e+f</script> if we have a graph <script type="math/tex">\Gamma</script> drawn on a different surface <script type="math/tex">S</script>.  You have to be a little bit more careful in defining what a face is: since the Jordan Curve Theorem fails for surfaces that aren’t the sphere, it is not the case that every component of <script type="math/tex">S\setminus \Gamma</script> will be a disk.</p>
+
+<p>However, if we require that <script type="math/tex">S</script> is drawn on the surface in such a way so that every “face” is actually a disk, then it turns out that <script type="math/tex">v-e+f=\chi(S)</script>, where <script type="math/tex">\chi(S)</script> is some number, called the <em>Euler characteristic</em>, that depends <em>only</em> on the surface <script type="math/tex">S</script>, and not on the graph.</p>
+
+<p>As an example, we saw that video game graphs always had <script type="math/tex">v-e+f=0</script>, and the natural way we got to make video game graphs were all living on the torus; the torus has euler characteristic 0.</p>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li><a href="mailto:paul.johnson@sheffield.ac.uk">paul.johnson@sheffield.ac.uk</a></li>
+          <li><a href="http://ptwiddle.github.io">Paul Johnson</a></li>
+          <li> Hicks J6b</li> 
+          <li> Office Hours: Monday 2-3, Wednesday 11-12</li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/ptwiddle">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">ptwiddle</span>
+            </a>
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Recent updates:  </p> 
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

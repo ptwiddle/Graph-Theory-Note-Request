@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Introduction</title>
+  <meta name="description" content="">
+
+  <link rel="stylesheet" href="/Graph-Theory-Note-Request//css/main.css">
+  <link rel="canonical" href="http://localhost:4000/Graph-Theory-Note-Request//Introduction/">
+  <link rel="alternate" type="application/rss+xml" title="Graph Theory Note Compilation" href="http://localhost:4000/Graph-Theory-Note-Request//feed.xml" />
+</head>
+
+
+ <!-- Mathjax.  But maybe I want this not in header and only in pages that might use math? -->
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/Graph-Theory-Note-Request//">Graph Theory Note Compilation</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Introduction/">Introduction</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Walks/">Walks</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Algorithms/">Algorithms</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Colouring/">Colouring Graphs</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Surfaces/">Graphs on Surfaces</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Introduction</h1>
+  </header>
+
+  <article class="post-content">
+    <h2 id="graphs">Graphs</h2>
+
+<p>Graphs usually (but not always) are thought of showing how things are set of things are connected together.</p>
+
+<h1 id="definition-of-a-graph">Definition of a graph</h1>
+
+<p>A <em>graph</em> \(\Gamma\) consists of:</p>
+
+<ul>
+  <li>a set \(V(\Gamma)\) of vertices</li>
+  <li>a set \(E(\Gamma)\) of edges</li>
+</ul>
+
+<p>Each edge either connects two vertices of \(V(\Gamma)\) together, or connects a vertex to itself.</p>
+
+<h1 id="examples">Examples</h1>
+
+<p>See the slides for many picture examples, but here are some common examples:</p>
+
+<ul>
+  <li>cities as vertices and roads connecting them as edges</li>
+  <li>people as vertices and an edge between two people if they know each other</li>
+  <li>atoms in a molecule as vertices, with an edge between them if they are connected by a covalent bond</li>
+  <li>countries on a map as vertices, and shared borders as edges</li>
+</ul>
+
+<h1 id="a-few-more-definitions">A few more definitions</h1>
+
+<p>There are two features of graphs that are sometimes convenient to not allow.</p>
+
+<p>A <em>loop</em> is an edge that connects a vertex to itself, and a <em>multiple edge</em> is when there is more than one edge connecting the same two vertices.  A graph without these features is called <em>simple</em>.</p>
+
+<p>We say two vertices are <em>adjacent</em> if there is an edge between them.</p>
+
+<p>The <em>degree</em> or <em>valency</em> of a vertex in a simple graph is the number of vertices it is adjacent to.</p>
+
+<h2 id="a-first-question">A first question</h2>
+
+<p>Suppose you are at a party with six other people, so that there are seven people total at the party.  Is it possible that everybody knows exactly three other people at the party?</p>
+
+<p>To translate this into graph theory, we make the people vertices, and put an edge between two people if they know each other.  We are then asking if a graph exists with seven vertices, where each vertex has degree three.</p>
+
+<p>It turns out that this is not possible; one way to prove this would be doing a case by case analysis of trying to make such a graph, but such proofs are usually long, messy, and not particularly enlightening.</p>
+
+<p>Instead, we argued as follows: suppose that everyone at the party shook hands with the people they knew, but not with the people they don’t know.  How many handshakes would occur?</p>
+
+<p>It is immediate from the definition that the number of handshakes would be the number of edges in the graph.  But we could also count the number of handshakes in another way: each person is going to shake hands three times, so people will be involved in handshakes 3*7=21 times.  But since each handshake involves two people, this should be twice the number of handshakes.  From this reasoning, we see there should be 21/2=10.5 edges in the graph, which is absurd, and so we see that such a party is not possible.</p>
+
+<p>The argument given above easily generalizes to give</p>
+
+<h1 id="eulers-handshaking-lemma">Euler’s handshaking lemma:</h1>
+<p>The sum of the degrees of the vertices of a graph is twice the number of edges of the graph:</p>
+
+<script type="math/tex; mode=display">\sum_{v\in V(\Gamma)}d(v)=2|E(\Gamma)|</script>
+
+<h1 id="proof">Proof:</h1>
+<p>Each edge has two ends; each end contributes 1 to the degree of one vertex, and hence to the sum of all the degrees.  \(\square\)</p>
+
+<h2 id="graph-theory-in-chemistry">Graph theory in Chemistry</h2>
+
+<p>In organic chemistry, atoms are joined together by covalent bonds; we represent this in a graph with the atoms as vertices and the edges representing the bonds.  The location of the element on the periodic table determines the valency of the vertices corresponding to that element:</p>
+
+<ul>
+  <li>Hydrogen (H) and Fluorine (F) have degree 1</li>
+  <li>Oxygen (O) and Sulfur (S) have degree 2</li>
+  <li>Nitrogen (N) and Phosphorous (P) have degree 3</li>
+  <li>Carbon (C) has degree 4</li>
+</ul>
+
+<p>Usually, most of the atoms involved are carbon and hydrogen.  Carbon atoms are not labelled with a C, but just left blank, while hydrogen atoms are left off completely.  One can then complete the full structure of the molecule using the valency of each vertex.</p>
+
+<p>Graphs coming from organic chemistry do not have to be simple – sometimes there are double bonds, where a pair of carbon atoms have two edges between them.</p>
+
+<h1 id="definition-degree-sequence">Definition: degree sequence</h1>
+<p>The <em>degree sequence</em> of a graph is just the list (with multiplicity) of the degrees of all the vertices.</p>
+
+<p>So, knowing the chemical composition of a molecule determines the degree sequence of its corresponding graph.  However, it is possible that the same set of atoms may be put together into a molecule in more than one different ways.  In terms of graphs, this corresponds to “different” graphs that have the same degree sequence.</p>
+
+<h2 id="instant-insanity">Instant Insanity</h2>
+
+<p>A concrete, nontrivial application of graph theory is as a tool to solve the puzzle ``instant insanity’’, known sometimes as the four cubes problem.</p>
+
+<h1 id="basic-setup">Basic setup</h1>
+
+<p>In this puzzle, one is given four cubes.  Each face of each cube is painted one of four different colours: blue, green, red or yellow.  The goal is to line the four cubes up in a row, so that along the four long edges (front, top, back, bottom) each of the four colours appears eactly once.</p>
+
+<p>Depending on how the cubes are coloured, this may be not be possible, or there may be many such possibilities.  In the original instant insanity, there is exactly one solution.  I have made a <a href="https://www.youtube.com/watch?v=GsbhRfjaaN8">video</a> that explains how to use graph theory to show the solution to the original onstant insanity.</p>
+
+<p>There are many variations on Instant Insanity, discussion of which can be found, for <a href="http://www.cs.brandeis.edu/~storer/JimPuzzles/ZPAGES/zzzInstantInsanity.html">here</a> and <a href="http://www.jaapsch.net/puzzles/insanity.htm">here</a>.  There’s also <a href="https://www.youtube.com/watch?v=CQ2gHSKZBEw">a commercial</a> for the game.</p>
+
+<h2 id="an-impossible-example">An impossible example</h2>
+
+<p>In lecture, I walked through proving that the following example has no solutions.  The work was done on the board and not in the slides, but I will present the work here.</p>
+
+<p>The four cubes in question are:</p>
+
+<image src="../Slides/Pictures/ImpossibleCubes.png"></image>
+
+<h1 id="enter-graph-theory">Enter graph theory</h1>
+
+<p>We will now construct a graph that encodes the important part of the structure of the cubes.</p>
+
+<p>The vertices of the graph will be the four colors, B, G, R and Y.  We will put an edge between two colors each time they appear as opposite faces on a cube, and we will label that edge with a number 1-4 denoting which cube the two opposite faces appear.  So from the first cube, there will be a loop at B, and edge between G and R, and an edge between Y and R.</p>
+
+<p>The graph corresponding to the four cubes above is the following:</p>
+
+<image src="../Slides/Pictures/InstantInsanityImpossibleGraph.JPG"></image>
+
+<h1 id="proving-our-cubes-were-impossible">Proving our cubes were impossible</h1>
+
+<p>How does this graph help us study the solutions of the Instanity Insanity puzzle?  Suppose we had an arrangement of the cubes that was a solution.  Then, from each cube, pick the edge representing the colors facing front and back on that cube.  These four edges are a subgraph of our original graph, with one edge of each label, since we picked one edge from each cube.  Furthermore, since we assumed the arrangement of cubes was a solution of instant insanity, each color appears once on the front face and once on the back.  In terms of our subgraph, this translates into asking that each vertex has degree two.</p>
+
+<p>We got another subgraph satisfying these two properties by looking at the faces on the top and bottom for each cube and taking the corresponding edges.  Furthermore, these two subgraphs do not have any edges in common.</p>
+
+<p>Thus, given a solution to the instant insanity problem, we found a pair of subgraphs <script type="math/tex">S_1, S_2</script> satisfying:</p>
+
+<ol>
+  <li>Each subgraph <script type="math/tex">S_i</script> has one edge with each label 1,2,3,4</li>
+  <li>Every vertex of <script type="math/tex">S_i</script> has degree 2</li>
+  <li>No edge of the original graph is used in both <script type="math/tex">S_1</script> and <script type="math/tex">S_2</script></li>
+</ol>
+
+<p>As an exercise, one can check that given a pair of subgraphs satisfying 1-3, one can produce a solution to the instant insanity puzzle.</p>
+
+<p>Thus, to show the set of cubes we are currently examining does not have a solution, we need to show that the graph does not have two subgraphs satisfying properties 1-3.</p>
+
+<p>To do, this, we catalog all graphs satisfying properties 1-2.  If every vertex has degree 2, either</p>
+
+<ol>
+  <li>Every vertex has a loop</li>
+  <li>There is one vertex with a loop, and the rest are in a triangle</li>
+  <li>There are two vertices with loops and a double edge between the other two vertices</li>
+  <li>There are two pairs of double edges</li>
+  <li>All the vertices live in one four cycle</li>
+</ol>
+
+<p>A subgraphs of type 1 is not possible, because G and R do not have loops.</p>
+
+<p>For subgraphs of type 2, the only triangle is G-R-Y, and B does have loops.  The edge between Y-G must be labeled 3, which means the loop at B must be labeled 1.  This means the edge between G and R must be labeled 4 and the edge between Y and R must be 2, giving the following subgraph:</p>
+
+<p><a href="http://www.presheaf.com/?d=d4oj3rb54s1o455d3y411052m3sm"><img src="http://presheaf.com/cache/d4oj3rb54s1o455d3y411052m3sm.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>For type 3, the only option is to have loops at B and Y and a double edge between G and R.  We see the loop at Y must be labeled 2, one of the edges between G and R must be 4, and the loop at B and the other edge between G and R can switch between 1 and 3, giving two possibilities:</p>
+
+<p><a href="http://www.presheaf.com/?d=d4q2c25256yh02f391k2uwf95r4x"><img src="http://presheaf.com/cache/d4q2c25256yh02f391k2uwf95r4x.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>and</p>
+
+<p><a href="http://www.presheaf.com/?d=d1x1h4f1nv494b64t68504rc12nd"><img src="http://presheaf.com/cache/d1x1h4f1nv494b64t68504rc12nd.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>For subgraphs of type 4, the only option would be to have a double edge between B and G and another between Y and R; however, none of these edges are labeled 3 and this option is not possible.</p>
+
+<p>Finally, subgraphs of type 5 cannot happen because B is only adjacent to G and to itself; to be in a four cycle it would have two be adjacent to two vertices that aren’t itself.</p>
+
+<p>This gives three different possibilities for the subgraphs <script type="math/tex">S_i</script> that satisfy properties 1 and 2.  However, all three possibilities contain the the edge labeled 4 between G and R; hence we cannot choice two of them with disjoint edges, and the instant insanity puzzle with these cubes does not have a solution.</p>
+
+<h2 id="isomorphisms-when-are-two-graphs-the-same">Isomorphisms: When are two graphs “the same”?</h2>
+
+<p>It is possible to draw the same graph in the plane in many different ways – e.g., the pentagon and the five sided star are two different ways of drawing <script type="math/tex">C_5</script>.</p>
+
+<p>If two graphs are “the same” in this way, we say they are <em>isomorphic</em>.</p>
+
+<h1 id="definition">Definition</h1>
+
+<p>An <em>isomorphism</em> <script type="math/tex">\varphi:G\to H</script> of simple graphs is a bijection <script type="math/tex">\varphi:V(G)\to V(H)</script> that preserves the number of edges between vertices.  That is, if <script type="math/tex">v,w\in V(G)</script>, then the number of edges between <script type="math/tex">v</script> and <script type="math/tex">w</script> in <script type="math/tex">G</script> is equal to the number of edges between <script type="math/tex">\varphi(v)</script> and <script type="math/tex">\varphi(w)</script> in <script type="math/tex">H</script>.</p>
+
+<h1 id="example">Example</h1>
+
+<p>This animated gif shows several graphs isomorphic to the Petersen graph, and demonstrates that they are isomorphic:</p>
+
+<image src="../Slides/Pictures/PetersenIsomorphismAnimated.gif"></image>
+
+<h2 id="graph-isomorphism-problem">Graph isomorphism problem</h2>
+
+<p>The <em>graph isomorphism problem</em> is to decide whether or not two given graphs <script type="math/tex">G, H</script> are isomorphic.</p>
+
+<h1 id="general-discussion-for-mathematical-cultural-literacy">General discussion for mathematical cultural literacy</h1>
+
+<p>The isomorphism problem is of fundamental importance to theoretical computer science. Apart from its practical applications, the exact difficulty of the problem is unknown.  Clearly, if the graphs are isomorphic, this fact can be easily demonstrated and checked, which means the Graph Isomorphism is in NP.</p>
+
+<p>Most problems in NP are known either to be easy (solvable in polynomial time, P), or at least as difficult as any other problem in NP (NP complete).  This is not true of the Graph Isomorphism problem.   In November of last year, Laszlo Babai announced a quasipolynomial-time algorithm for the graph isomorphism problem – you can read about this work in <a href="https://www.quantamagazine.org/20151214-graph-isomorphism-algorithm/">this great popular science article</a>.</p>
+
+<h1 id="what-you-have-to-be-able-to-do">What you have to be able to do</h1>
+
+<p>Although solving the graph isomorphism problem for general graphs is quite difficult, doing it for small graphs by hand is not too bad and is something you must be able to do for the exam.</p>
+
+<p>If the two graphs are actually isomorphic, you have to actually write down an explicit isomorphism <script type="math/tex">\varphi:G\to H</script> should be given.</p>
+
+<p>If they are not isomorphic, you have to prove that they are not isomorphic.  Usually this is done by giving an <em>obstruction</em> – something that is different between the two graphs.  One easy example is that isomorphic graphs have to have the same number of edges and vertices.</p>
+
+<p>Another, only slightly more advanced invariant is the degree sequence of a graph that we saw last lecture in our discussion of chemistry.</p>
+
+<p>If <script type="math/tex">\varphi:G \to H</script> is an isomorphism of graphs, than we must have <script type="math/tex">d(\varphi(v))=d(v)</script> for all vertices <script type="math/tex">v</script>, and so the degree sequence must be preserved.  However, just because two graphs have the same degree sequences does not mean they are isomorphic.</p>
+
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li><a href="mailto:paul.johnson@sheffield.ac.uk">paul.johnson@sheffield.ac.uk</a></li>
+          <li><a href="http://ptwiddle.github.io">Paul Johnson</a></li>
+          <li> Hicks J6b</li> 
+          <li> Office Hours: Monday 2-3, Wednesday 11-12</li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/ptwiddle">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">ptwiddle</span>
+            </a>
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Recent updates:  </p> 
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Algorithms</title>
+  <meta name="description" content="">
+
+  <link rel="stylesheet" href="/Graph-Theory-Note-Request//css/main.css">
+  <link rel="canonical" href="http://localhost:4000/Graph-Theory-Note-Request//Algorithms/">
+  <link rel="alternate" type="application/rss+xml" title="Graph Theory Note Compilation" href="http://localhost:4000/Graph-Theory-Note-Request//feed.xml" />
+</head>
+
+
+ <!-- Mathjax.  But maybe I want this not in header and only in pages that might use math? -->
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/Graph-Theory-Note-Request//">Graph Theory Note Compilation</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Introduction/">Introduction</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Walks/">Walks</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Algorithms/">Algorithms</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Colouring/">Colouring Graphs</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Surfaces/">Graphs on Surfaces</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Algorithms</h1>
+  </header>
+
+  <article class="post-content">
+    <h2 id="trees-prufer-code">Trees: Prufer code</h2>
+
+<p>The goal of this section is to prove Cayley’s theorem:</p>
+
+<h1 id="theorem-cayley">Theorem (Cayley):</h1>
+<p>There are <script type="math/tex">n^{n-2}</script> trees on <script type="math/tex">n</script> labelled vertices.</p>
+
+<p>For instance, if there are three vertices, then there’s only one tree up to isomorphism: the path of length 2.  There are apriori 3!=6 ways to label the vertices of this tree, but since there’s an isomorphism from the tree to itself that keeps that the middle vertex fixed but switches the two end vertices, we’re really counting each of these labels twice, and we find out that there are really 3 different labelled trees on 3 vertices.</p>
+
+<p>This theorem is in the algorithms section because we will prove it by constructing the Prufer code, giving a bijection between labelled trees, and n-2 tuples of numbers between 1 and n.  But first we will need to establish a few basic facts about trees, that will be useful elsewhere.</p>
+
+<h1 id="leafs">Leafs</h1>
+
+<p>A useful concept when studying trees is that of a leaf:</p>
+
+<h1 id="definition">Definition</h1>
+
+<p>A <em>leaf</em> in a tree is a vertex of degree 1.</p>
+
+<h1 id="lemma">Lemma</h1>
+
+<p>Every finite tree with at least two vertices has at least two leaves.</p>
+
+<h1 id="proof-1-using-paths">Proof 1: using paths</h1>
+
+<p>Suppose <script type="math/tex">T</script> is at tree.  Since <script type="math/tex">T</script> has at least two vertices, at has at least one edge.  Pick any edge <script type="math/tex">e</script>, say, between <script type="math/tex">a</script> and <script type="math/tex">b</script>.  If the vertex <script type="math/tex">a</script> is a leaf, we have at least one leaf.  If not, there is another edge incident to <script type="math/tex">a</script>. and we can start a path from <script type="math/tex">a</script> away from <script type="math/tex">e</script> following this edge.  As long as the end vertex of our path is not a leaf we may continue our path, and we will never return to a vertex we have already encountered, since trees have unique paths between vertices.  Since <script type="math/tex">T</script> is finite, the path must eventually terminate – i.e., find a leaf.</p>
+
+<p>Following the same argument from the vertex <script type="math/tex">b</script> produces another leaf.
+<script type="math/tex">\square</script></p>
+
+<h1 id="proof-2-using-handshaking">Proof 2: using handshaking</h1>
+<p>We will use that <script type="math/tex">\Gamma</script> is connected, has <script type="math/tex">n>2</script> vertices, and <script type="math/tex">n-1</script> edges.</p>
+
+<p>Since <script type="math/tex">\Gamma</script> is a tree it is connected; since it has connected and has two vertices it cannot have any vertices of degree 0.</p>
+
+<p>Thus, if we assume for a contradiction that <script type="math/tex">\Gamma</script> has no leaves, then every vertex <script type="math/tex">\Gamma</script> had degree at least two.  Since we know <script type="math/tex">\Gamma</script> has <script type="math/tex">n</script> vertices and <script type="math/tex">n-1</script> leaves, applying the handshaking lemma gives:</p>
+
+<p><script type="math/tex">2n-2=2 |E(\Gamma)|=\sum_{v\in V(\Gamma)} d(v)\geq \sum_{v\in V(\Gamma)} 2=2n</script>
+a contradiction.  For the inequality to hold, <script type="math/tex">\Gamma</script> must have at least two vertices of degree 1.  <script type="math/tex">\square</script></p>
+
+<p>Leaves will play a very important role in this afternoon’s lecture on the Prüfer code.  In the meantime, we point out that the handshaking argument we give another application of the handshaking lemma argument above.   Recall that in the last lecture we stated the following, but did not provide a full proof:</p>
+
+<h1 id="proposition">Proposition</h1>
+
+<p>Let <script type="math/tex">\Gamma</script> be a graph with <script type="math/tex">n</script> vertices.  The following are equivalent:</p>
+
+<ol>
+  <li><script type="math/tex">\Gamma</script> is a tree.</li>
+  <li>Between any two vertices <script type="math/tex">a,b\in V(\Gamma)</script>, there is a unique path.</li>
+  <li><script type="math/tex">\Gamma</script> is connected, but removing any edge makes <script type="math/tex">\Gamma</script> disconnected.</li>
+  <li><script type="math/tex">\Gamma</script> has no cycles, but adding any edges to <script type="math/tex">\Gamma</script> creates a cycle.</li>
+  <li><script type="math/tex">\Gamma</script> is connected and has <script type="math/tex">n-1</script> edges</li>
+  <li><script type="math/tex">\Gamma</script> has no cycles and has <script type="math/tex">n-1</script> edges</li>
+</ol>
+
+<p>Trying to show all of these are equivalent takes a bit of time and is a slightly annoying; but we’re going to want the fact that a connected graph <script type="math/tex">\Gamma</script> with <script type="math/tex">n</script> vertices is a tree if and only if it has <script type="math/tex">n-1</script> edges.</p>
+
+<h1 id="lemma-1">Lemma</h1>
+<p><script type="math/tex">\Gamma</script> is a tree if and only if it has <script type="math/tex">n</script> vertices and <script type="math/tex">n-1</script> edges.</p>
+
+<h1 id="proof">Proof</h1>
+<p>We will use induction for both directions.   As a base case, the result is clear if <script type="math/tex">n</script> is 1 or 2.  Thus, we assume that the theorem holds for all connected graphs with <script type="math/tex">% <![CDATA[
+k<n %]]></script> vertices, and we must show that it holds for graphs with <script type="math/tex">n</script> edges.</p>
+
+<p>Suppose we know <script type="math/tex">\Gamma</script> is a tree, and we want to prove it has <script type="math/tex">n-1</script> edges.  By the above lemmas, we know <script type="math/tex">\Gamma</script> has a leaf, and deleting that vertex and the edge next to it we get a smaller tree <script type="math/tex">\Gamma^\prime</script> with <script type="math/tex">n-1</script> vertices.  By induction, the theorem holds for <script type="math/tex">\Gamma^\prime</script>, and so it has <script type="math/tex">n-2</script> edges; adding <script type="math/tex">e</script> back, we see that <script type="math/tex">\Gamma</script> had <script type="math/tex">n-1</script> edges as desired.</p>
+
+<p>For the other direction, suppose we know that <script type="math/tex">\Gamma</script> is connected and has <script type="math/tex">n-1</script> edges, but don’t know that <script type="math/tex">\Gamma</script> is a tree.  We still know that <script type="math/tex">\Gamma</script> has at least two vertices of degree 1, as the handshaking lemma argument given above only uses the facts that <script type="math/tex">\Gamma</script> is connected and has the right number of leaves.</p>
+
+<p>But then we can delete one of the vertices of degree 1 and the edge next to it and preceed as above; the resulting graph <script type="math/tex">\Gamma^\prime</script> will be connected, have <script type="math/tex">n-1</script> vertices and <script type="math/tex">n-2</script> edges.  Thus, by the inductive hypothesis, <script type="math/tex">\Gamma^\prime</script> is a tree, and so <script type="math/tex">\Gamma</script> is as well.</p>
+
+<h2 id="chemistry-application-alkanes">Chemistry Application: Alkanes</h2>
+
+<p>In organic chemistry, an <em>alkane</em> is a molecule with formula <script type="math/tex">C_nH_{2n+2}</script>.  The simplest Alkanes are methane <script type="math/tex">CH_4</script>, ethane <script type="math/tex">C_2H_6</script> and propane <script type="math/tex">C_3H_8</script>.</p>
+
+<p><img src="../Slides/Pictures/Hydrocarbons.jpg" alt="Alkanes" /></p>
+
+<p>It appears from the graph that Alkanes are all trees; we prove that now.</p>
+
+<h1 id="lemma-2">Lemma</h1>
+<p>Any alkane <script type="math/tex">C_nH_{2n+2}</script> is a tree.</p>
+
+<h1 id="proof-1">Proof</h1>
+
+<p>We will use that a connected graphs on <script type="math/tex">m</script> vertices with <script type="math/tex">m-1</script> edges is a tree.</p>
+
+<p>Any graph of a molecule is necessarily connected, and so to prove an Alkane is a tree we must count the number of vertices and edges.</p>
+
+<p>There are <script type="math/tex">n+(2n+2)=3n+2</script> vertices.</p>
+
+<p>We count the edges using the Handshaking lemma. Carbon atoms have valency 4, and there are <script type="math/tex">n</script> of them, while Hydrogen atoms have valency 1.  Thus, the sum of all the degrees of the vertices is <script type="math/tex">6n+2</script>.  The number of edges is half of these, namely <script type="math/tex">3n+1</script>, which is 1 less than the number of vertices.  Since to be an atom it must be connected, we see that any Alkane is a tree.  <script type="math/tex">\square</script></p>
+
+<h2 id="isomers">Isomers</h2>
+
+<h1 id="definition-1">Definition</h1>
+
+<p>Two molecules are <em>isomers</em> if they have the same molecular formula, but the molecules are put together in a different way.</p>
+
+<p>When there are 1, 2 or 3 carbon molecules, the only possible Alkanes is a line of carbon molecules.  The resulting chemicals are methane, ethane, and propane.  when <script type="math/tex">n=4</script>, there are two possible alignments of the Carbon atoms: in a line, which is butane, or in a `T’ shape, which is isobutane; when <script type="math/tex">n=5</script>, there are three different possibilities.</p>
+
+<p>Around 1875, Hamilton used graph theory to count the number of isomers of the Alkane <script type="math/tex">C_nH_{2n+2}</script>.  One can forget about the placement of the hydrogen molecules, and just count the struture of the carbon molecules; these two will be a tree.  Since the valency of Carbon is four the maximum degree of a vertex in these trees will be 4, and so counting isomers of <script type="math/tex">C_nH_{2n+2}</script> is equivalent to counting isomorphism classes of trees with <script type="math/tex">n</script> vertices, all of degree at most 4.</p>
+
+<h2 id="prufer-code">Prufer Code</h2>
+
+<p>In this lecture, we will prove Cayley’s formula, using the Prüfer code.  In particular, we will give a map <script type="math/tex">PC</script> that takes in a labelled tree with <script type="math/tex">n</script> vertices, and returns a string of <script type="math/tex">n-2</script> numbers, each between <script type="math/tex">1</script> and <script type="math/tex">n</script>, and an inverse map <script type="math/tex">\mathbf{Tree}</script> that takes in a string of numbers and returns a labelled tree.</p>
+
+<p>The starting observation is that to write down a labelled tree is the same as writing down its <script type="math/tex">n-1</script> edges.  Since the vertices are ordered, each edge can be written down by a pair of numbers in <script type="math/tex">\{1,\dots,n \}</script>. The Prüfer code begins by writing down these edges in a clever ordering.</p>
+
+<h1 id="the-prüfer-code">The Prüfer code</h1>
+
+<p>We are now ready to introduce the Prüfer code.  We begin by writing down the edges of <script type="math/tex">T</script>.  The two vertices of each edge will be written down in a column, with the parent vertex in the top row and the child vertex on the bottom row.  We record the edges in the following specific order.</p>
+
+<p>First, find the lowest numbered leaf, and record its number in the bottom row.   Above it, write down the number of the vertex this leaf is adjacent to, which we call the parent vertex.  Now, delete that lowest numbered leaf and the edge connecting it to the rest of the tree.  Find the lowest leaf on the resulting vertex, and record its number, and the number of its parent, in the next column.</p>
+
+<p>Iterate this procedure until we have written down all <script type="math/tex">n-1</script> edges of our tree, with the leaf numbers in the top row, and the parent numbers in the bottom row.</p>
+
+<p>The list of the first <script type="math/tex">n-2</script> parent numbers (i.e., all but the last), is the Prüfer code of <script type="math/tex">T</script>.</p>
+
+<h1 id="example">Example</h1>
+
+<p>We illustrate the construction of the Prüfer code by finding the code for the following labelled tree:</p>
+
+<p><a href="http://www.presheaf.com/?d=d1483r4h5s5l12l4i4g1d2w2z292r34"><img src="http://presheaf.com/cache/d1483r4h5s5l12l4i4g1d2w2z292r34.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>The lowest leaf is 3, which is attached to 1, so the first column goes</p>
+
+<table>
+<tr>
+   <td> Parent node </td>
+   <td> 1</td>
+   <td> 6</td>
+   <td> 6</td>
+   <td> 2</td>
+   <td> 2</td>
+   <td> 7</td>
+</tr>
+<tr>
+  <td> Child node </td>
+   <td> 3</td>
+   <td> 1</td>
+   <td> 4</td>
+   <td> 5</td>
+   <td> 6</td>
+   <td> 2</td>   
+</tr>
+</table>
+
+<p>Thus, the Prüfer code for the above tree is 16622.</p>
+
+<h1 id="reconstructing-a-tree-from-its-prüfer-code">Reconstructing a tree from its Prüfer Code</h1>
+
+<p>It is clear from the above definition that the Prüfer code is a list of <script type="math/tex">n-2</script> numbers between 1 and <script type="math/tex">n</script>; it is not clear that any such list of numbers is obtained, nor that any two trees give us a different set of numbers.  To see this, we describe an inverse algorithm, that constructs a tree on <script type="math/tex">n</script> vertices from a Prüfer code.</p>
+
+<p>More explicitly, the inverse algorithm will take as input a Prüfer code, and from that Prüfer code it will reconstruct the full ordered table of edges we constructed in the Prüfer code algorithm.  It should be clear from the description that the algorithm actually reproduces this table, and not some other table, and hence that the two algorithms are inverse to each other.  This shows that the Prüfer code is a bijection, which proves Cayley’s formula, as there are <script type="math/tex">n^{n-2}</script> valid Prüfer codes on <script type="math/tex">n</script> vertices.</p>
+
+<p>This algorith proceeds by figuring out the corresponding child nodes one by one.  Recall that any number in our list appeared as a parent node, and so is not a leaf.  At the first step, we deleted the smallest leaf.  So the first child node is the smallest number that does not appear on our list.</p>
+
+<p>After we recorded that edge, we deleted it; thus, the second child number is the smallest number that we haven’t</p>
+
+<ol>
+  <li>already used as a leaf number</li>
+  <li>doesn’t appear at or after the current spot as a parent.</li>
+</ol>
+
+<h1 id="example-1">Example</h1>
+
+<p>We first reconstruct the tree we did in the first example, from its code.
+Recall, the Prüfer code was 1 6 6 2 2.</p>
+
+<p>The lowest unused number is 3, so that is the first child.</p>
+
+<p>To find the next unused number, we move to the second column.  1 only appears in the first column, and so it is now the lowest number that doesn’t appear, and so it goes underneath the first 6.  Moving to the third column, we have already used 1 and 3 as child nodes.  The number 2 is still to appear as a parent, and so can’t be a leaf yet, and so 4 is the first number that we haven’t used yet.  Similar reasoning gives 5 and 7 for the 4th and 5th column.</p>
+
+<p>Finally, the last remaining edge connects the two nodes we have not used as leaves yet; in this case 2 and 6.</p>
+
+<h2 id="spanning-trees">Spanning trees</h2>
+
+<h1 id="definition-2">Definition</h1>
+<p>Let <script type="math/tex">\Gamma</script> be a graph.  A <em>spanning tree</em> of <script type="math/tex">\Gamma</script> is a subgraph <script type="math/tex">T\subset \Gamma</script> such that <script type="math/tex">T</script> is a tree and <script type="math/tex">T</script> contains every vertex of <script type="math/tex">\Gamma</script>.</p>
+
+<p>Spanning trees are useful because they are a minimal connected subgraph that lets us get to all of <script type="math/tex">\Gamma</script>.  For instance, if the vertices are cities and the edges are roads, a spanning tree is a minimal set of edges that guarantee that you can get from any one city to another.</p>
+
+<h1 id="examples">Examples:</h1>
+
+<ul>
+  <li>
+    <p>The cycle graph <script type="math/tex">C_n</script> has <script type="math/tex">n</script> spanning trees obtained by deleting any one edge.</p>
+  </li>
+  <li>
+    <p>A spanning tree of the complete graph <script type="math/tex">K_n</script> is the same thing as a labelled tree, so there are <script type="math/tex">n^{n-2}</script> such spanning trees by Cayley’s theorem.</p>
+  </li>
+</ul>
+
+<h1 id="lemma-3">Lemma:</h1>
+<p>Every connected graph <script type="math/tex">\Gamma</script> has a spanning tree.</p>
+
+<h1 id="proof-2">Proof</h1>
+<p>By our characterisation of trees, if <script type="math/tex">T</script> is connected and has no cycles, then <script type="math/tex">T</script> is a tree.  So it is enough to find a connected subgraph <script type="math/tex">T</script> of <script type="math/tex">\Gamma</script> that contains every vertex.</p>
+
+<p>Let <script type="math/tex">H</script> be any subgraph of <script type="math/tex">\Gamma</script> that is connected and contains all the vertices of <script type="math/tex">\Gamma</script>.  If <script type="math/tex">H</script> has a cycle, we can pick any edge <script type="math/tex">e</script> of that cycle and delete it, and <script type="math/tex">H</script> will still be connected: any path that used <script type="math/tex">e</script> can use the rest of the cycle instead.</p>
+
+<p>Thus, starting from <script type="math/tex">\Gamma</script>, we may repeatedly remove edges from cycles and not disconnect <script type="math/tex">\Gamma</script> until there are no more cycles left; the result will be a spanning tree.  <script type="math/tex">\square</script></p>
+
+<h2 id="introduction-to-optimisation-problems">Introduction to optimisation problems</h2>
+
+<p>One motivation for introducing trees was as the “cheapest” way of connecting <script type="math/tex">n</script> points.  Here, “cheapest” just means the least number of edges.  In real world applications, not all edges are created equal.  For example, consider the case where the vertices of <script type="math/tex">\Gamma</script> represent cities, and the edges are roads connecting them.  If we’re looking for the shortest path between two cities, we do not just want the least number of edges, as some roads will be longer than others, or be busy and take longer to drive.  These subtleties can be addressed with a <em>weighted graph</em>.</p>
+
+<h1 id="definition-3">Definition</h1>
+
+<p>A <em>weighted graph</em> is a graph <script type="math/tex">\Gamma</script>, together with a non-negative real number <script type="math/tex">w(e)</script> for each edge <script type="math/tex">e\in E(\Gamma)</script>.</p>
+
+<h1 id="example-2">Example</h1>
+
+<p>Typically, weighted graphs are presented by drawing labelling each edge of the graph with its weight:</p>
+
+<p><img src="../Slides/Pictures/weightedgraph.png" alt="Example of a weighted graph" /></p>
+
+<h1 id="real-world-examples-of-weights">Real world examples of weights</h1>
+<p>Even in the case where the vertices of <script type="math/tex">\Gamma</script> are cities and the edges are conenctions between them, there are many possible interpretations of edges weights:</p>
+<ul>
+  <li>The edge weights <script type="math/tex">w(e)</script> might represent the cost of building or maintaining the road between the city</li>
+  <li>The edge weights migth represent the distance between the cities</li>
+  <li>The edge weights might represent travel times between the cities</li>
+  <li>the edge weights might represent the cost of a train/plane ticket between the cities</li>
+</ul>
+
+<p>In the next few class lectures, we will discuss the following optimisation problems for weighted graphs:</p>
+
+<ul>
+  <li>The <em>minimal spanning tree</em> – finding a spanning tree <script type="math/tex">T</script> of <script type="math/tex">\Gamma</script> where the total cost of the edges in <script type="math/tex">T</script> is the cheapest among all spanning trees of <script type="math/tex">\Gamma</script>.</li>
+  <li>The <em>shortest path</em> – finding a path between two vertices of <script type="math/tex">\Gamma</script>, where the total weight of all the edges in the path is minimal among all paths between the two vertices.</li>
+  <li>The <em>traveling salesman problem</em> – finding a hamiltonian cycle in a graph <script type="math/tex">\Gamma</script> where the total weight of all the edges is minimal.</li>
+</ul>
+
+<p>We will present two algorithms for finding the cheapest spanning trees.  Both are “greedy algorithms”, which in some sense plan ahe</p>
+
+<h2 id="kruskals-and-prims-algorithm">Kruskal’s and Prim’s algorithm</h2>
+
+<p>We now present Kruskal’s and Prim’s algorithm, both of which solve the problem of finding a minimal weight spanning tree in a weighted graph <script type="math/tex">\Gamma</script>.  Before discussing the algorithn, let’s look at a toy example to get an idea of the problem.</p>
+
+<h1 id="example-3">Example</h1>
+
+<p>Consider the following weighted graph:</p>
+
+<p><a href="http://www.presheaf.com/?d=d4j1dh1n5r454664y4r70405p273k5c"><img src="http://presheaf.com/cache/d4j1dh1n5r454664y4r70405p273k5c.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>Obviously, there are three spanning trees, obtained by removing one of the three edges.  The spanning tree A-B-C has weight 7, B-C-A has weight 6, C-A-B has weight 5, and so we have found the cheapest spanning tree.</p>
+
+<p>Any finite graph will only have finitely many spanning trees, and so it is always possible to exhaustively find all of them, compute their weights, and hence find the cheapest.  However, for large graphs there will be many spanning trees.  For example, a spanning tree of the complete graph <script type="math/tex">K_n</script> is equivalent to a labelled tree on <script type="math/tex">n</script> vertices, and by Cayley we know there are <script type="math/tex">n^{n-2}</script> of these trees, which grows faster than exponential or factorial!  Thus, in practice, to find a minimal spanning tree we need a more efficient algorithm than brute forst checking all the possibilities.</p>
+
+<h1 id="kruskals-algorthm">Kruskal’s algorthm</h1>
+
+<p>For finding spanning trees, it turns out there are several easy algorithms that will always find the cheapest spanning tree.  Many of them are <em>greedy algorithms</em>, which do not “plan ahead”, but rather blindly do the best possible next step.  Kruskal’s algorithm is an example of these, which builds a spanning tree <script type="math/tex">T</script> step by step, starting from the subgraph of <script type="math/tex">\Gamma</script> consisting just of the vertices of <script type="math/tex">\Gamma</script> and no edges:</p>
+
+<ol>
+  <li>Find the cheapest edge <script type="math/tex">e</script> remaining from <script type="math/tex">\Gamma</script>, and remove it from <script type="math/tex">\Gamma</script>.</li>
+  <li>If adding <script type="math/tex">e</script> to <script type="math/tex">T</script> will not make any loops, add it to <script type="math/tex">T</script>.  Otherwise, discard it.</li>
+  <li>Iterate the first two steps until <script type="math/tex">T</script> is a spanning tree.</li>
+</ol>
+
+<p>In class we now ran an example of Kruskal’s algorithm – we’ll skip that in the note, but there are many such examples available online, for instance, in <a href="https://www.youtube.com/watch?v=71UQH7Pr9kU"> this short Youtube video </a>.</p>
+
+<p>Note that to have a spanning tree, the graph <script type="math/tex">\Gamma</script> must be connected.  Running Kruskal’s algorithm on a disconnected graph will produce a spanning tree for each component of <script type="math/tex">\Gamma</script>.</p>
+
+<h1 id="prims-algorithm">Prim’s Algorithm</h1>
+<p>A different greedy algorithm to find the minimal weight spanning tree is Prim’s algorithm.  Rather than always taking the cheapest edge anywhere on the graph, Prim’s algorithm starts at some vertex <script type="math/tex">v</script> and builds out.  At a given point it has built a tree <script type="math/tex">T</script> containing the vertex <script type="math/tex">v</script>; call the vertices in this tree the “discovered” vertices.  <script type="math/tex">T</script> is initially to be just the vertex <script type="math/tex">v</script>, and no edges, and then the algorithm runs by repeatedly finding the cheapest edge <script type="math/tex">e</script> edge that has one vertex in <script type="math/tex">T</script> and one vertex not in <script type="math/tex">T</script> and adding that edge (and hence a new vertex) to <script type="math/tex">T</script>.</p>
+
+<h1 id="comments-on-minimal-spanning-trees">Comments on minimal spanning trees</h1>
+
+<ol>
+  <li>Although Kruskal’s algorithm only finds a single minimal spanning tree, the only time Kruskal’s algorithm has any choice is in what order to add edges with the same weight.  Thus, it is possible to find all minimal spanning trees by analyzing what happens when we had a choice of edges to add.</li>
+  <li>There are many other algorithms that find the minimal spanning tree: for instance, the <a href="https://en.wikipedia.org/wiki/Reverse-delete_algorithm">Reverse-delete algorithm</a> is the opposite of the greedy algorithm.  Rather than adding the cheapest edge possible, the Reverse-delete algorithm worries about getting “stuck” having to add an expensive edge.  It continually finds the most expensive edge.  If removing that edge does not disconnect the graph, it does so.  If it does disconnect the graph, it keeps that edge as part of the spanning tree, and finds the next most expensive edge.</li>
+</ol>
+
+<h2 id="traveling-salesman-problem">Traveling Salesman Problem</h2>
+<p>The <em>Traveling Salesman Problem</em>, abbreviated TSP, is the following: given a weighted graph <script type="math/tex">\Gamma</script>, find the cheapest Hamiltonian path; that is, the cheapest closed walk on <script type="math/tex">\Gamma</script> that visits every vertex exactly once.</p>
+
+<p>We begin with some basic observations:</p>
+
+<ul>
+  <li>
+    <p>It is enough to consider the complete graph <script type="math/tex">K_n</script>.  If we are given some other weighted graph <script type="math/tex">\Gamma</script>, we can add all the edges not in <script type="math/tex">\Gamma</script> but make their weights <em>much</em> larger than any of the weights inside <script type="math/tex">\Gamma</script>.</p>
+  </li>
+  <li>
+    <p>The problem of determining whether a given graph <script type="math/tex">\Gamma</script> has a Hamiltonian cycle is a special case of the traveling salesman problem.  To see this, suppose we’re given a graph <script type="math/tex">\Gamma</script>, and we want to determine whether it is Hamiltonian.  We create a weighted <script type="math/tex">K_n</script>, with vertices the vertices of <script type="math/tex">\Gamma</script> by giving the edge <script type="math/tex">v-w</script> a very small weight <script type="math/tex">\epsilon</script> if <script type="math/tex">v</script> and <script type="math/tex">w</script> <em>are</em> adjacent in <script type="math/tex">\Gamma</script>, and a very large weight <script type="math/tex">M</script> if <script type="math/tex">v</script> and <script type="math/tex">w</script> <em>are not</em> adjacent in <script type="math/tex">\Gamma</script>.  Then, any Hamiltonian path in <script type="math/tex">\Gamma</script> would have cost <script type="math/tex">n\epsilon</script>, where as any path that uses an edge not in <script type="math/tex">\Gamma</script> costs more than <script type="math/tex">M</script>.  So, if we make <script type="math/tex">M>n\epsilon</script>, the TSP for our weighted <script type="math/tex">K_n</script> will have a solution with cost less than <script type="math/tex">M</script> if and only if <script type="math/tex">\Gamma</script> had a Hamiltonian cycle.</p>
+  </li>
+</ul>
+
+<p>Since determining whether a graph <script type="math/tex">\Gamma</script> is Hamiltonian is difficult (NP complete), the TSP will also be.  As such, we will not discuss any algorithms for actually solving TSP.  Instead, we will discuss methods for giving upper and lower bounds for the TSP.</p>
+
+<h1 id="upper-bounds-for-tsp">Upper bounds for TSP</h1>
+
+<p>Since the TSP asks for the cheapeast Hamiltonian cycle, taking <em>any</em> Hamiltonian cycle and calculating its cost will be an upper bound for the TSP.  Just choosing a random Hamiltonian cycle will in general be very expensive and silly – for instance, going from Sheffield to London to Rotherham to Edinburgh to Chesterfield to Glasgow to Nottingham to Brighton is clearly not optimal.</p>
+
+<p>A greedy algorithm will give a heuristically better result: we call it the <em>nearst neighbor algorithm</em>.  At each step, simply go to the nearest city you have not already visited.  This will give good results at the beginning, but since we do not do any planning ahead, it will in general give bad results, as the following example illustrates:</p>
+
+<p><a href="http://presheaf.com/?d=di3d5c2w4p5r4v5j31382bn3c1643l"><img src="http://presheaf.com/cache/di3d5c2w4p5r4v5j31382bn3c1643l.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>Consider running the Nearest Neighbor algorithm starting at <script type="math/tex">v_0</script>.  At the first step, we have a choice – we could go to <script type="math/tex">v_1</script> or to <script type="math/tex">v_9</script>.  Suppose we go to <script type="math/tex">v_1</script>.  After that, our choice is forced – <script type="math/tex">v_1-v_2-v_3-v_4-v_5-v_6-v_7-v_8-v_9</script> costs one at each step.  Now, we still have to visit <script type="math/tex">T</script> before returning to <script type="math/tex">V_0</script>, which will cost us 10 to detour through.  We clearly should have planned ahead and visited <script type="math/tex">T</script> in between vertices <script type="math/tex">v_4</script> and <script type="math/tex">v_5</script> at a cost of 4.</p>
+
+<p>The nearest neighbour algorithm for finding upper bounds is demonstrated in <a href="https://www.youtube.com/watch?v=wRvQSLtRnz0">this video</a>.</p>
+
+<p>Clearly the nearest neighbour algorithm is not very good, and better algorithms are possible; we present it first to give a quick but reasonable way to get a solution to TSP that isn’t <em>completely</em> horrible, and second to illustrate that greedy algorithms in general will not be efficient.</p>
+
+<h1 id="lower-bounds-for-tsp">Lower bounds for TSP</h1>
+
+<p>To get a lower bound for TSP we have to be a little more intelligent.  Suppose we had a solution <script type="math/tex">C</script> to the TSP for <script type="math/tex">\Gamma</script>, and that we deleted one vertex <script type="math/tex">v</script> from <script type="math/tex">C</script>.  Deleting a vertex from a cycle gives us a path <script type="math/tex">P</script>, and in particular a tree.  Furthermore, <script type="math/tex">P</script> visits every vertex in <script type="math/tex">\Gamma</script> except for <script type="math/tex">v</script>, and so it is a spanning tree of <script type="math/tex">\Gamma\setminus v</script>.</p>
+
+<p>We can use Kruskal’s algorithm (or another) to find a minimal spanning tree <script type="math/tex">T</script> of <script type="math/tex">\Gamma\setminus v</script>, and we have that <script type="math/tex">w(P)\geq w(T)</script>.  The cycle <script type="math/tex">C</script> contains just two more edges, from <script type="math/tex">v</script> to two other vertices, say <script type="math/tex">a</script> and <script type="math/tex">b</script>.  We can obtain lower bounds on the weights of the edges <script type="math/tex">v-a</script> and <script type="math/tex">v-b</script> by taking the weights of the lowest two edges out of <script type="math/tex">v</script>, maybe <script type="math/tex">e_1</script> and <script type="math/tex">e_2</script>.  We have</p>
+
+<script type="math/tex; mode=display">w(C)=w(P)+w(a-v)+w(b-v)\geq w(T)+w(e_1)+w(e_2)</script>
+
+<p>giving us a lower bound on solutions to the TSP.</p>
+
+<p>This method of finding lower bounds is illustrated in <a href="https://www.youtube.com/watch?v=NA2RToI4-ro">this video</a></p>
+
+<h2 id="dijkstras-algorithm-for-shortest-paths">Dijkstra’s algorithm for shortest paths</h2>
+<p>Dijkstra’s algorithm finds the shortest path between two points in a weighted graph. There are some variations on it, and the version we present will find the shortest path between a fixed vertex <script type="math/tex">v</script> and every other vertex <script type="math/tex">a</script> of <script type="math/tex">\Gamma</script>, which basically all versions do without more work.  We will denote <script type="math/tex">c_v(a)</script> to be the cost of the shortest path from <script type="math/tex">v</script> to <script type="math/tex">a</script>.</p>
+
+<p>For Dijkstra’s algorithm to work, we require all the edge weights to be non-negative, but in real world examples this is usually true.</p>
+
+<h1 id="the-algorithm">The algorithm</h1>
+
+<p>The basic set-up of the algorithm is to keep a running a list of “potential” shortest paths between <script type="math/tex">v</script> and some of the vertices.  To initialize this list, we just record every vertex <script type="math/tex">a</script> adjacent to <script type="math/tex">v</script>, and the weight of the edge <script type="math/tex">vw</script> connecting them.</p>
+
+<p>At each step of the algorithm, we choose the lowest such “potential” shortest path, say, a path to <script type="math/tex">a</script>, and declare it to actually be the shortest path.  We then update our list of potential shortest paths by looking at all vertices <script type="math/tex">b</script> adjacent to <script type="math/tex">w</script>.  We could get a path from <script type="math/tex">v</script> to <script type="math/tex">b</script> by first taking a path from <script type="math/tex">v</script> to <script type="math/tex">a</script>, which costs <script type="math/tex">c_v(a)</script>, and then adding on the edge from <script type="math/tex">a</script> to <script type="math/tex">b</script>, which costs <script type="math/tex">w(ab)</script>.  Thus, we compare the cost of the “potential” shortest path from <script type="math/tex">v</script> to <script type="math/tex">b</script> (if there is one), with <script type="math/tex">c_v(a)+w(a-b)</script>, and make whichever one is lower the new potential cheapest path from <script type="math/tex">v</script> to <script type="math/tex">b</script>.  We then remove <script type="math/tex">a</script> from the list of vertices, and continue on our way.</p>
+
+<h1 id="proof-of-correctness">Proof of correctness</h1>
+
+<p>Unlike Kruskal’s algorithm, where we had to do some work to prove that the algorithm always produced the correct answer, with Dijkstra’s algorithm it is fairly obvious that it will always give the correct answer.  Consider the step where we final a potential shortest path from <script type="math/tex">v</script> to <script type="math/tex">a</script> as actually being the shortest.  If this wasn’t true, then there would be some shorter path from <script type="math/tex">v</script> to <script type="math/tex">a</script>.  We haven’t found this path yet, which means it would have to travel through some other vertex <script type="math/tex">b</script> we haven’t yet optimized the minimal path for.  But any path from <script type="math/tex">v</script> to <script type="math/tex">b</script>.  But since the cost of the path from <script type="math/tex">v</script> to <script type="math/tex">a</script> is minimal among potential paths we can see, the cost of the path from <script type="math/tex">v</script> to <script type="math/tex">b</script> would be at least as much as the cost to <script type="math/tex">v</script> to <script type="math/tex">a</script>, and that’s before we add the extra cost from <script type="math/tex">b</script> to <script type="math/tex">a</script>.</p>
+
+<h1 id="examples-1">Examples</h1>
+
+<p>There are <a href="https://www.youtube.com/watch?v=0nVYi3o161A">many</a> <a href="https://www.youtube.com/watch?v=WN3Rb9wVYDY">videos</a> online demonstrating Dijkstra’s algoirth, as well as some <a href="http://optlab-server.sce.carleton.ca/POAnimations2007/DijkstrasAlgo.html">applets</a></p>
+
+<h1 id="real-world">Real world</h1>
+
+<p>If all you know is that you have a weighted graph, then in some technical sense Dijkstra’s algorithm is the best that you can do.  However, in the real world, we often have more information.</p>
+
+<p>For example, suppose I wanted to drive the shortest path from Sheffield to Edinburgh.  I know that I want to drive mostly North – I won’t be able to drive in a straight line to Edinburgh, and it may be that the fastest trip drives South slightly to get onto a highway – but in general, I want to be headed North, and I can safely throw out any path that takes me through Nottingham.  However, since Nottingham is closer to Sheffield than Edinburgh is, Dijkstra’s algorithm would waste a lot of time exploring the roads around Nottingham.</p>
+
+<p>Similarly video games usually take place on very regular grid-like graphs, where it’s very clear what the shortest path would be.  However, there may be obstacles in the way that the shortest path must avoid, which means we can’t blindly return one of the regular shortest paths.</p>
+
+<p>If we have extra information about our situation, like the examples above, then better algorithms than Dijkstra’s are possible.</p>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li><a href="mailto:paul.johnson@sheffield.ac.uk">paul.johnson@sheffield.ac.uk</a></li>
+          <li><a href="http://ptwiddle.github.io">Paul Johnson</a></li>
+          <li> Hicks J6b</li> 
+          <li> Office Hours: Monday 2-3, Wednesday 11-12</li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/ptwiddle">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">ptwiddle</span>
+            </a>
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Recent updates:  </p> 
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

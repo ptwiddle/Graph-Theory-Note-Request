@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Walks</title>
+  <meta name="description" content="">
+
+  <link rel="stylesheet" href="/Graph-Theory-Note-Request//css/main.css">
+  <link rel="canonical" href="http://localhost:4000/Graph-Theory-Note-Request//Walks/">
+  <link rel="alternate" type="application/rss+xml" title="Graph Theory Note Compilation" href="http://localhost:4000/Graph-Theory-Note-Request//feed.xml" />
+</head>
+
+
+ <!-- Mathjax.  But maybe I want this not in header and only in pages that might use math? -->
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/Graph-Theory-Note-Request//">Graph Theory Note Compilation</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Introduction/">Introduction</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Walks/">Walks</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Algorithms/">Algorithms</a>
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Colouring/">Colouring Graphs</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/Graph-Theory-Note-Request//Surfaces/">Graphs on Surfaces</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Walks</h1>
+  </header>
+
+  <article class="post-content">
+    <p>If the edges in a graph <script type="math/tex">\Gamma</script> represent connections, it is obvious to ask whether <script type="math/tex">\Gamma</script> as a whole is “connected”.  There are two seemingly different ways of making this precise; today we introduce these and show that they are the same.</p>
+
+<p>It may be easiest to define what it means for a graph <script type="math/tex">\Gamma</script> to be <em>disconnected</em>.</p>
+
+<h1 id="definition-disjoint-union">Definition: Disjoint union</h1>
+
+<p>Given two graphs <script type="math/tex">\Gamma_1</script> and <script type="math/tex">\Gamma_2</script>, the <em>disjoint union</em> <script type="math/tex">\Gamma_1\sqcup \Gamma_2</script> is obtained by taking the disjoint union of both the vertices and edges of <script type="math/tex">\Gamma_1</script> and <script type="math/tex">\Gamma_2</script>.  So <script type="math/tex">\Gamma_1\sqcup\Gamma_2</script> consists of a copy of <script type="math/tex">\Gamma_1</script> and a copy of <script type="math/tex">\Gamma_2</script>, with no edges in between the two graphs.</p>
+
+<h1 id="definition-disconnected">Definition: Disconnected</h1>
+
+<p>A graph <script type="math/tex">\Gamma</script> is <em>disconnected</em> if we can write <script type="math/tex">\Gamma=\Gamma_1\sqcup \Gamma_2</script> for two proper (i.e., not all of <script type="math/tex">\Gamma</script>) subgraphs <script type="math/tex">\Gamma_1</script> and <script type="math/tex">\Gamma_2</script>.</p>
+
+<p>It then makes sense to say that <script type="math/tex">\Gamma</script> is <em>connected</em> if it is not disconnected.  However, the more intuitive notion of being connected is that “you can get from any vertex to any other”, which we now make precise.</p>
+
+<h2 id="walks-trails-paths">Walks, Trails, Paths</h2>
+
+<h1 id="definition">Definition</h1>
+<p>A <em>walk</em> in a graph <script type="math/tex">\Gamma</script> is a sequence</p>
+
+<script type="math/tex; mode=display">v_0, e_1, v_1,e_2, v_2,\dots, v_{n-1}, e_n, v_n</script>
+
+<p>where</p>
+<ul>
+  <li>the <script type="math/tex">v_i</script> are vertices</li>
+  <li>the <script type="math/tex">e_j</script> are edges</li>
+  <li>edge <script type="math/tex">e_j</script> goes between vertices <script type="math/tex">v_{j-1}</script> and <script type="math/tex">v_j</script></li>
+</ul>
+
+<p>Note that, when the graph <script type="math/tex">\Gamma</script> does not have multiple edges, it is enough to record just the <script type="math/tex">v_i</script>, but if <script type="math/tex">\Gamma</script> has multiple edges that just knowing the vertices does not determine the walk.</p>
+
+<p>We say that the walk is between vertices <script type="math/tex">a</script> and <script type="math/tex">b</script> if <script type="math/tex">a=v_0</script> to vertex <script type="math/tex">b=v_n</script>.  Thus, it is natural to say that a graph <script type="math/tex">\Gamma</script> is connected if there is a walk between any two vertices <script type="math/tex">a,b\in\Gamma</script>.  We now show that this agrees with our previous definition of connected.</p>
+
+<h1 id="lemma">Lemma</h1>
+<p>The following are equivalent:</p>
+
+<ol>
+  <li><script type="math/tex">\Gamma</script> is connected.</li>
+  <li>There is a walk between any two vertices <script type="math/tex">v, w\in V(\Gamma)</script></li>
+</ol>
+
+<h1 id="proof">Proof</h1>
+
+<p>1 implies 2: Supppose that <script type="math/tex">\Gamma</script> is connected, and let <script type="math/tex">v, w\in V(\Gamma)</script>; we want to show that there is a walk from <script type="math/tex">v</script> to <script type="math/tex">w</script>.</p>
+
+<p>Define <script type="math/tex">S\subset V(\Gamma)</script> to be the set of all vertices <script type="math/tex">u\in V(\Gamma)</script> so that there is a walk from <script type="math/tex">v</script> to <script type="math/tex">u</script>; we want to show that <script type="math/tex">w\in S</script>.</p>
+
+<p>First, observe that there are no edges from <script type="math/tex">S</script> to <script type="math/tex">V(\Gamma)\setminus S</script>.  Suppose that <script type="math/tex">e</script> was an edge between <script type="math/tex">a\in S</script> and <script type="math/tex">b\in\Gamma\setminus S</script>.  Since <script type="math/tex">a\in S</script>, by the definition of <script type="math/tex">S</script> there is a walk <script type="math/tex">v=v_0v_1v_2\cdots v_m=a</script> from <script type="math/tex">v</script> to <script type="math/tex">a</script>.  We can add the edge <script type="math/tex">e</script> to the end of the walk, to get a walk from <script type="math/tex">v</script> to <script type="math/tex">b</script>, and hence by definition <script type="math/tex">b\in S</script>.</p>
+
+<p>Now suppose that <script type="math/tex">w\notin S</script>.  Then <script type="math/tex">S</script> and <script type="math/tex">V(\Gamma)\setminus S</script> are both nonempty, and by the above there are no edges between them, and so <script type="math/tex">\Gamma</script> is not connected, a contradiction.</p>
+
+<p>To prove 2 implies 1, we prove the contrapositive.  If <script type="math/tex">\Gamma</script> is not connected, then there are two vertices <script type="math/tex">v,w\in V(\Gamma)</script> so that there is no walk from <script type="math/tex">v</script> to <script type="math/tex">w</script>.</p>
+
+<p>Suppose that <script type="math/tex">\Gamma=\Gamma_1\sqcup\Gamma_2</script>, and pick <script type="math/tex">v\in V(\Gamma_1), w\in V(\Gamma_2)</script>.  Any walk from <script type="math/tex">v</script> to <script type="math/tex">w</script> starts in <script type="math/tex">V(\Gamma_1)</script> and ends in <script type="math/tex">V(\Gamma_2)</script>, and so at some point there must be an edge from a vertex in <script type="math/tex">\Gamma_1</script> to a vertex in <script type="math/tex">\Gamma_2</script>, but there are no such edges <script type="math/tex">\square</script></p>
+
+<h2 id="types-of-walks">Types of Walks</h2>
+
+<p>Many questions in graph theory ask whether or not a walk of a certain type exists on a graph: we introduce some notation that will be needed for these questions.</p>
+
+<p>We say a walk is <em>closed</em> if it starts and ends on the same vertex; i.e., <script type="math/tex">v_0=v_n</script>.  The <em>length</em> of a walk is <script type="math/tex">n</script>, the number of edges in it.  The <em>distance</em> between two vertices <script type="math/tex">v</script> and <script type="math/tex">w</script> is the length of the shortest walk from <script type="math/tex">v</script> to <script type="math/tex">w</script>, if one exists, and <script type="math/tex">\infty</script> if one does not exist.</p>
+
+<h1 id="walks-trails-and-paths">Walks, trails and paths</h1>
+
+<ul>
+  <li>If the edges <script type="math/tex">e_i</script> of the walk are all distinct, we call it a <em>trail</em></li>
+  <li>If the vertices <script type="math/tex">v_i</script> of the walk are all distinct (except possibly <script type="math/tex">v_0=v_m</script>), we call the walk a <em>path</em>.  The exception is to allow for the possibility of closed paths.</li>
+</ul>
+
+<h1 id="lemma-1">Lemma</h1>
+
+<p>Let <script type="math/tex">v,w\in V(\Gamma)</script>.  The following are equivalent:</p>
+
+<ol>
+  <li>There is a walk from <script type="math/tex">v</script> to <script type="math/tex">w</script>.</li>
+  <li>There is a trail from <script type="math/tex">v</script> to <script type="math/tex">w</script></li>
+  <li>There is a path from <script type="math/tex">v</script> to <script type="math/tex">w</script>.</li>
+</ol>
+
+<h1 id="proof-1">Proof</h1>
+
+<p>Obviously, 3 implies 2 which implies 1, as any path is a trail, and any trail is a walk.</p>
+
+<p>That 1 implies 3 is intuitively obvious: if you repeat a vertex, then you’ve visited someplace twice, and weren’t taking the shortest route.  Let’s make this argument mathematically precise.</p>
+
+<p>Suppose we have a walk <script type="math/tex">v=v_0,e_1,\dots, e_m, v_m=w</script> that is not a path.  Then, we must repeat some vertex, say <script type="math/tex">v_i=v_k</script>, with <script type="math/tex">% <![CDATA[
+i<k %]]></script>.  Then we can cut out all the vertices and edges between <script type="math/tex">v_i</script> and <script type="math/tex">v_k</script> to obtain a new walk</p>
+
+<p><script type="math/tex">v=v_0,e_1, v_1,\dots, e_i, v_i, e_{k+1}, v_{k+1}, e_{k+2}, v_{k+2}, \dots, v_m</script>.</p>
+
+<p>Since <script type="math/tex">% <![CDATA[
+i<k %]]></script>, the new walk is strictly shorter than our original walk.  Since the length of a walk is finite, if we iterate this process the result must eventually terminate.  That means all our vertices are distinct, and hence is a path.  <script type="math/tex">\square</script></p>
+
+<p>The field of graph theory arguably began with the following question.</p>
+
+<h2 id="the-bridges-of-konigsberg">The Bridges of Konigsberg</h2>
+
+<p>the city of Konigsberg (now Kaliningrad) was built on both sides of a river, and contained two large islands.  The 4 sectors of the city were connected by seven bridges, as follows (picture from <a href="https://en.wikipedia.org/wiki/Seven_Bridges_of_K%C3%B6nigsberg">Wikipedia</a>):</p>
+
+<p><img src="../Konigsberg_bridges.png" alt="Konigsberg in Euler's time" /></p>
+
+<p>A group of friends enjoyed strolling through the city, and created a game: could they take a walk in the city, crossing every bridge exactly once, and return to where they started from?  Eventually, Euler proved that such a walk is not possible, and in doing so founded graph theory.</p>
+
+<h2 id="eulerian-cycles">Eulerian Cycles</h2>
+
+<p>Before presenting Euler’s proof,  let us formulate the question precisely in terms of graph theory, which will also generalize the problem.</p>
+
+<p>We can produce a graph <script type="math/tex">\Gamma_K</script>, which we will callt he Kingsberg graph, that represents the city of Konigsberg as follows.  There will be four vertices, representing the four land-masses are vertices.  Every bridge will be represented by an edge.</p>
+
+<p>Then, the question reduces to finding a closed walk in the graph that will uses every edge exactly once.  In particular, this walk will not use any edge more than once and hence will be a trail (though it may repeat vertices).</p>
+
+<h1 id="definition-eulerian-cycle">Definition: Eulerian cycle</h1>
+<p>Let <script type="math/tex">\Gamma</script> be any graph. An <em>Eulerian cycle</em> or <em>Eulerian tour</em> is a walk in <script type="math/tex">\Gamma</script> that visits every edge exactly once.</p>
+
+<p>The citizens Konigsberg were asking whether an Eulerian cycle existed in <script type="math/tex">\Gamma_K</script>.  Euler did more: he gave simple criterion to tell whether or not <em>any</em> connected graph <script type="math/tex">\Gamma</script> has an Eulerian tour.  We will now state and prove his result.</p>
+
+<h1 id="theorem">Theorem</h1>
+
+<p>A connected graph <script type="math/tex">\Gamma</script> (without loops) has an Eulerian cycle if and only if every vertex of <script type="math/tex">\Gamma</script> has even degree.</p>
+
+<h1 id="proof-2">Proof</h1>
+
+<p>First, we show this condition is necessary.  Let <script type="math/tex">\Gamma</script> be a connected graph, and suppose that it has an Eulerian cycle <script type="math/tex">w=v_0, e_1, v_1,\dots, e_n, v_n</script>.  Let <script type="math/tex">v</script> be any vertex in <script type="math/tex">\Gamma</script>; we must show that <script type="math/tex">v</script> has even degree.  We will do this by pairing up the edges incident to <script type="math/tex">v</script>.</p>
+
+<p>Since <script type="math/tex">w</script> is a closed walked, we may assume that it does not start at <script type="math/tex">v</script>.  Then consider the first time that the walk <script type="math/tex">w</script> visits <script type="math/tex">v</script> – it will enter by some edge <script type="math/tex">e_i</script>, and leave by some other edge <script type="math/tex">e_{i+1}</script>.  We pair these two edges up.</p>
+
+<p>The walk <script type="math/tex">w</script> may visit <script type="math/tex">v</script> multiple times; each time it does, it must enter from one edge, and leave from another edge.  Each time the walk <script type="math/tex">w</script> visits <script type="math/tex">e</script>, we will pair up the edge the walk <script type="math/tex">w</script> entered with the edge <script type="math/tex">w</script> left by.  Since by supposition the walk <script type="math/tex">w</script> uses every edge of <script type="math/tex">\Gamma</script> exactly once, we see that every edge incident to <script type="math/tex">v</script> will be paired up with exactly one other edge in this way, and hence <script type="math/tex">v</script> must have even degree.</p>
+
+<p>We now show that this condition is sufficient.  That is, we suppose that every vertex of <script type="math/tex">\Gamma</script> has even degree; we must show that <script type="math/tex">\Gamma</script> has an Eulerian cycle.  We will proceed by induction on the number of edges of <script type="math/tex">\Gamma</script>.</p>
+
+<p>Any connected graph with 0 edges consists of just a vertex, and hence trivially has an Eulerian cycle.</p>
+
+<p>Now, for the inductive step, we suppose that <script type="math/tex">\Gamma</script> has <script type="math/tex">n</script> edges, and further suppose that we know Euler’s theorem is true for all graphs with less than <script type="math/tex">n</script> edges – that is, suppose that every connected graph <script type="math/tex">\Gamma</script> with less than <script type="math/tex">n</script> edges, all of whose vertices have even degree has an Eulerian walk.</p>
+
+<p>We first claim that <script type="math/tex">\Gamma</script> has <em>some</em> closed trail.  Start at any vertex <script type="math/tex">v_0</script>.  Since <script type="math/tex">\Gamma</script> is connected, <script type="math/tex">v_0</script> has at least one edge <script type="math/tex">e_1</script> so we start our trail with <script type="math/tex">v_0, e_1, v_1</script>.  Since every vertex has an even degree, there must be another edge out of <script type="math/tex">v_1</script>, say <script type="math/tex">e_2</script> leading to <script type="math/tex">v_2</script>.</p>
+
+<p>We continue building a trail in <script type="math/tex">\Gamma</script> by randomly selecting an unused edge of <script type="math/tex">\Gamma</script> at our current vertex.  Since every vertex has even degree, and whenever our trail visits a vertex we use up edges two at a time (coming and going), we see that whenever we arrive at a vertex <script type="math/tex">v</script>, there must be another edge leaving it to continue our trail – unless perhaps we hit our starting vertex <script type="math/tex">v_0</script>, where we have only used one edge up.  Thus, if we randomly start building a trail we must eventually return to our starting vertex and obtain a closed trail.</p>
+
+<p>Now, given our graph <script type="math/tex">\Gamma</script>, we know it has <em>some</em> closed trail <script type="math/tex">w</script>.  If <script type="math/tex">w</script> uses every edge of <script type="math/tex">\Gamma</script>, we are done.  If not, we consider the new graph <script type="math/tex">\Gamma^\prime</script> obtained by deleting every edge of <script type="math/tex">w</script> (but not the vertices).  Note that every vertex of <script type="math/tex">\Gamma^\prime</script> has even degree.  Second, <script type="math/tex">\Gamma^\prime</script> may not be connected, but each connected component <script type="math/tex">\Gamma_i^\prime</script> of <script type="math/tex">\Gamma^\prime</script> has fewer edges that <script type="math/tex">\Gamma</script> and hence has an Eulerian tour <script type="math/tex">u_i</script> by supposition.  Together, <script type="math/tex">w</script> and the <script type="math/tex">u_i</script> visit every edge of <script type="math/tex">\Gamma</script> exactly once.  We can stitch them together into one closed path as follows – each <script type="math/tex">u_i</script> shares at least one vertex <script type="math/tex">v_i</script> with <script type="math/tex">w</script>.  We trace the path <script type="math/tex">w</script>, but the first time we visit vertex <script type="math/tex">v_i</script> we insert the path <script type="math/tex">u_i</script> before continuing along <script type="math/tex">w</script>.  <script type="math/tex">\square</script></p>
+
+<h2 id="hamiltonian-cycles">Hamiltonian Cycles</h2>
+
+<h1 id="definition-1">Definition</h1>
+
+<p>A graph <script type="math/tex">\Gamma</script> is <em>Hamilton</em> if there exists a closed walk that visits every vertex exactly once.</p>
+
+<p>Although the definition of a Hamiltonian graph is extremely similar to an Eulerian graph, it is much harder to determine whether a graph is Hamiltonian or not: doing so is an NP-complete problem.</p>
+
+<h1 id="examples">Examples</h1>
+
+<h1 id="proposition">Proposition</h1>
+
+<p>The Petersen graph is <em>not</em> Hamiltonian.</p>
+
+<h1 id="proof-3">Proof</h1>
+
+<p>Suppose the Petersen graph was Hamiltonian, and let <script type="math/tex">v_0-v_1-v_2-v_3-\cdots-v_{9}-v_0</script> denote the Hamiltonian cycle, as we have drawn below:</p>
+
+<p><a href="http://presheaf.com/?d=d6v1605k333c292518133v4y2d721y67"><img src="http://presheaf.com/cache/d6v1605k333c292518133v4y2d721y67.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>The Petersen graph has 15 edges, and the Hamiltonian cycle uses 10 of them, so there must be 5 edges left in the Petersen graph that are not in the Hamiltonian cycle.  The proof works by considering the possibilities for these 5 extra edges.</p>
+
+<p>Let us consider the extra edge incident to <script type="math/tex">v_0</script>; the others are equivalent.  Since the Petersen graph has no loops or multiple edges, this edge cannot go from <script type="math/tex">v_0</script> to itself, or to <script type="math/tex">v_1</script> or <script type="math/tex">v_9</script>.</p>
+
+<p>Since the Petersen graph has no triangles or 4 cycles, this edge cannot “skip” 1 or 2 vertices in the Hamiltonian cycle.  More specifically, we cannot   we cannot have an edge from <script type="math/tex">v_0</script> to <script type="math/tex">v_2</script> or <script type="math/tex">v_8</script>, as these make triangles, as in the dashed edges below:</p>
+
+<p><a href="http://presheaf.com/?d=d6r2i32k1q4vx542c511q4m6tkc16"><img src="http://presheaf.com/cache/d6r2i32k1q4vx542c511q4m6tkc16.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>And we cannot have edges <script type="math/tex">v_0</script> to <script type="math/tex">v_3</script> or to <script type="math/tex">v_7</script>, as these make 4 cycles:
+<a href="http://presheaf.com/?d=d18386i4q5g1d1k5s6r4cm2c5j587270"><img src="http://presheaf.com/cache/d18386i4q5g1d1k5s6r4cm2c5j587270.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>Thus, the only possibility for these edges is that they “skip” 4 or 5 vertices (skipping more than 5 vertices is the same as skipping less vertices in the other direction).  So for instance, <script type="math/tex">v_0</script> can only be connected to <script type="math/tex">v_4, v_5</script> or <script type="math/tex">v_6</script> with its extra edge.</p>
+
+<p>We now claim that at least one of these extra edges must “skip” 4 vertices.  If not, then every extra edge would skip 5 vertices.  Since each vertex has degree 3, there must be one extra edge through each of these vertices, connecting to the opposite vertex.  But this configuration has many four cycles – for instance, <script type="math/tex">v_0-v_1-v_6-v_5-v_0</script>.  Since the Petersen graph does not have any 4 cycles, we see this cannot occur:</p>
+
+<p><a href="http://presheaf.com/?d=dc5s2424634t1dn1654k583r3l5k1f"><img src="http://presheaf.com/cache/dc5s2424634t1dn1654k583r3l5k1f.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>Relabeling our edges if necesary, we can make the extra edge that skips the 4 cycle be the edge <script type="math/tex">v_0-v_4</script>.  Now, consider the extra edge at <script type="math/tex">v_5</script>.  This cannot skip 5, because that would make it adjacent to <script type="math/tex">v_0</script>, which already has its extra edge.  Thus, it must skip 4, and be adjacent to either <script type="math/tex">v_9</script> or <script type="math/tex">v_1</script>.  But since each of these are adjacent to <script type="math/tex">v_0</script>, it would create a 4-cycle: either <script type="math/tex">v_0-v_4-v_5-v_9-v_0</script>, or <script type="math/tex">v_0-v_4-v_5-v_1-v_0</script>.</p>
+
+<p>We have drawn the edge from <script type="math/tex">v_0</script> to <script type="math/tex">v_4</script> in solid red; any of the dashed edges from <script type="math/tex">v_5</script> create a configuration not found in the Petersen graph:</p>
+
+<p><a href="http://presheaf.com/?d=d2s1c3f6d1x2p6l71696u17b6f4jm1q"><img src="http://presheaf.com/cache/d2s1c3f6d1x2p6l71696u17b6f4jm1q.png" title="click to go to presheaf.com for editing" /></a>  <script type="math/tex">\square</script></p>
+
+<h2 id="partial-results-on-hamiltonian-graphs">Partial results on Hamiltonian graphs</h2>
+
+<p>Although there is no complete characterisation of Hamiltonian graphs, there are several nice sufficient conditions for a graph to be Hamiltonian;</p>
+
+<h1 id="ores-theorem">Ore’s Theorem</h1>
+
+<p>Let <script type="math/tex">\Gamma</script> be a simple graph with <script type="math/tex">n</script> vertices such that for any two nonadjacent vertices <script type="math/tex">v</script> and <script type="math/tex">w</script>, we have <script type="math/tex">\text{deg}(v)+\deg{w}\geq n</script>.  Then <script type="math/tex">\Gamma</script> is Hamiltonian.</p>
+
+<h1 id="proof-4">Proof</h1>
+
+<p>We will give a proof by contradiction.  First, suppose that <script type="math/tex">\Gamma</script> were a counterexample.  Adding edges to <script type="math/tex">\Gamma</script> preserves the condition on the degrees, and so we may continually add edges to <script type="math/tex">\Gamma</script> until adding any more would create a Hamiltonian cycle.  We will thus assume that <script type="math/tex">\Gamma</script> is a counterexample with the maximal set of edges.</p>
+
+<p>The benefit of this is that such a <script type="math/tex">\Gamma</script> must have a non-closed path that visits every vertex exactly once.  To see this, add one more edge <script type="math/tex">e</script> to <script type="math/tex">\Gamma</script> – the resulting graph then has a Hamiltonian cycle, which must pass through <script type="math/tex">e</script>, deleting <script type="math/tex">e</script> give the desired path.</p>
+
+<p>Let <script type="math/tex">v_1-v_2-\dots v_{n-1}-v_n</script> be the path visiting every vertex of <script type="math/tex">\Gamma</script>.  We will complete the proof by showing there exists an <script type="math/tex">i\in 3,\cdots, n-1</script> so that <script type="math/tex">v_1</script> is adjacent to <script type="math/tex">v_i</script> and <script type="math/tex">v_n</script> is adjacent to <script type="math/tex">v_{i-1}</script>.  This completes the proof because <script type="math/tex">v_1-v_2-\cdots v_{i-1}-v_n-v_{n-1}-v_{n-2}-\dots v_i-v_1</script> is a Hamiltonian path.  We illustrate this below, with <script type="math/tex">n=9</script> and <script type="math/tex">i=5</script>:</p>
+
+<p><a href="http://presheaf.com/?d=d1e3c343k1z5b6a4t2m4n6l1o273m2z4w"><img src="http://presheaf.com/cache/d1e3c343k1z5b6a4t2m4n6l1o273m2z4w.png" title="click to go to presheaf.com for editing" /></a></p>
+
+<p>The existence of such an <script type="math/tex">i</script> follows from the pigeon hole principle.  Since <script type="math/tex">v_1</script> and <script type="math/tex">v_n</script> are not adjacent by supposition, the sum of their degrees is at least <script type="math/tex">n</script>.  Two edges incident to them are accounted for <script type="math/tex">v_1-v_2</script>, and <script type="math/tex">v_{n-1}-v_{n-2}</script>, so there must be at least <script type="math/tex">n-2</script> other edges incident to <script type="math/tex">v_1</script> or <script type="math/tex">v_{n}</script>.  Since <script type="math/tex">\Gamma</script> is simple, any such edge out of <script type="math/tex">v_1</script> has <script type="math/tex">n-3</script> possibilities:  <script type="math/tex">v_3, v_4, \dots, v_{n-1}</script>.  Similarly, there are <script type="math/tex">n-3</script> possibilities for an edge adjacent to <script type="math/tex">v_n</script> – <script type="math/tex">v_2,v_3,\dots, v_{n-2}</script>.  We pair these edges up into the possibilities we want, creating <script type="math/tex">n-3</script> bins.  Since there are <script type="math/tex">n-2</script> edges we need to distribute among these bins, one of the bins must contain at least two, which is exactly what we needed to show.</p>
+
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li><a href="mailto:paul.johnson@sheffield.ac.uk">paul.johnson@sheffield.ac.uk</a></li>
+          <li><a href="http://ptwiddle.github.io">Paul Johnson</a></li>
+          <li> Hicks J6b</li> 
+          <li> Office Hours: Monday 2-3, Wednesday 11-12</li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/ptwiddle">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">ptwiddle</span>
+            </a>
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">Recent updates:  </p> 
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
